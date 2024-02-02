@@ -56,11 +56,11 @@ flutter:
           style: italic
         - asset: assets/fonts/ComicNeue-Regular.ttf
           weight: 400
-        - asset: assets/fonts/ComicNeue-RegularItalic.ttf
+        - asset: assets/fonts/ComicNeue-Italic.ttf
           weight: 400
           style: italic
+        - asset: assets/fonts/ComicNeue-Bold.ttf
+          weight: 700
         - asset: assets/fonts/ComicNeue-BoldItalic.ttf
-          weight: 500
-        - asset: assets/fonts/ComicNeue-BoldItalic.ttf
-          weight: 500
+          weight: 700
           style: italic
