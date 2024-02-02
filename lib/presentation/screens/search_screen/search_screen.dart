@@ -102,19 +102,14 @@ class SearchResultTileWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(3),
                   color: AppColors.white,
                 ),
-                child: Theme(
-                  data: ThemeData(
-                    fontFamily: "Roboto",
-                  ),
-                  child: const Text(
-                    "SUB",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColors.red,
-                      fontWeight: AppFontWeight.bolder,
-                      fontSize: AppFontSize.medium,
-                    ),
+                child: const Text(
+                  "SUB",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: AppColors.red,
+                    fontWeight: AppFontWeight.bolder,
+                    fontSize: AppFontSize.medium,
                   ),
                 ),
               ),

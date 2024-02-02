@@ -1,8 +1,10 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeWatchHistoryWidget extends StatelessWidget {
@@ -23,14 +25,14 @@ class HomeWatchHistoryWidget extends StatelessWidget {
         ),
         const Gap(H: 10),
         SizedBox(
-          height: screenHeight * 0.15,
+          height: screenHeight * 0.16,
           child: ListView.separated(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemBuilder: (context, index) => Container(
               padding: const EdgeInsets.all(8),
-              height: 100,
+              // height: 100,
               width: tileWidth,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -65,40 +67,121 @@ class HomeWatchHistoryWidget extends StatelessWidget {
                     ),
                   ),
                   const Gap(W: 10),
-                  const Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "One Piece",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: AppFontWeight.bolder,
-                          fontSize: AppFontSize.smallTitle,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "One Piece",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontWeight: AppFontWeight.bolder,
+                            fontSize: AppFontSize.smallTitle,
+                          ),
                         ),
-                      ),
-                      Gap(W: 10),
-                      Text(
-                        "EP 148",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: AppColors.red,
-                          fontWeight: AppFontWeight.normal,
-                          fontSize: AppFontSize.medium,
+                        const Gap(W: 10),
+                        const Text(
+                          "EP 148",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.red,
+                            fontWeight: AppFontWeight.normal,
+                            fontSize: AppFontSize.medium,
+                          ),
                         ),
-                      ),
-                    ],
-                  ))
+                        const Gap(H: 10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            color: AppColors.white,
+                          ),
+                          child: const Text(
+                            "SUB",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColors.red,
+                              fontWeight: AppFontWeight.bolder,
+                              fontSize: AppFontSize.verySmall,
+                            ),
+                          ),
+                        ),
+                        const Gap(H: 10),
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.play_fill,
+                              color: AppColors.indicator,
+                              size: 18,
+                            ),
+                            Gap(W: 10),
+                            Text(
+                              "Continue watching",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: AppColors.indicator,
+                                fontWeight: AppFontWeight.normal,
+                                fontSize: AppFontSize.medium,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
             separatorBuilder: (context, index) => const Gap(W: 10),
             itemCount: 5,
           ),
-        )
+        ),
+        const Gap(H: 10),
+        Align(
+          alignment: Alignment.center,
+          child: InkWell(
+            splashColor: AppColors.grey.withOpacity(0.2),
+            onTap: () {
+              AppNavigator.push(
+                  context: context, screenName: AppRouter.WATCH_HISTORY_SCREEN);
+            },
+            child: Container(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "See full hostory",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontWeight: AppFontWeight.normal,
+                      fontSize: AppFontSize.large,
+                    ),
+                  ),
+                  Gap(W: 3),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                    color: AppColors.white,
+                    size: 25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
