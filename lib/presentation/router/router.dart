@@ -2,6 +2,7 @@
 
 import 'package:anime_red/presentation/screens/home_screen/home_screen.dart';
 import 'package:anime_red/presentation/screens/landing_screen/landing_screen.dart';
+import 'package:anime_red/presentation/screens/search_screen/search_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -10,6 +11,7 @@ class AppRouter {
   static const SETTINGS_SCREEN = "/settings";
   static const ANIME_INFO_SCREEN = "/anime_info";
   static const BOOKMARKS_SCREEN = "/bookmarks";
+  static const SEARCH_SCREEN = "/search";
   static const WATCH_HISTORY_SCREEN = "/wath_history";
 
   static Route? ongeneratedRoute(RouteSettings settings) {
@@ -20,6 +22,8 @@ class AppRouter {
         return _animatePage(const Scaffold());
       case HOME_SCREEN:
         return _animatePage(const HomeScreen());
+      case SEARCH_SCREEN:
+        return _animatePage(const SearchScreen());
       default:
         return null;
     }
