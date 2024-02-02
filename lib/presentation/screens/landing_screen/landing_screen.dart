@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
+import 'package:anime_red/presentation/widgets/theme_button.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -59,84 +60,57 @@ class LandingWidgetsView extends StatelessWidget {
 
     return Padding(
       padding: AppPadding.normalScreenPadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(
-                AppImageAssets.logo,
-                height: screenHeight * 0.06,
-              ),
-              const Gap(H: 30),
-              const Text(
-                "Explore the world of Anime, You can stream thousands of Anime at AnimeRED for free",
-                style: TextStyle(
-                  color: AppColors.white,
-                  fontWeight: AppFontWeight.normal,
-                  fontSize: AppFontSize.medium,
-                ),
-              ),
-              const Gap(H: 10),
-              const Text(
-                "Enjoy Ad free quality content",
-                style: TextStyle(
-                  color: AppColors.white,
-                  fontWeight: AppFontWeight.normal,
-                  fontSize: AppFontSize.medium,
-                ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
+      child: TweenAnimationBuilder<double>(
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeIn,
+        tween: Tween(begin: 20, end: 0),
+        builder: (context, currentValue, child) {
+          return Opacity(
+            opacity: 1 - currentValue * 0.04,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ThemeButtonWidget(onTap: () {}),
-                Gap(H: screenHeight * 0.06),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      AppImageAssets.logo,
+                      height: screenHeight * 0.06,
+                    ),
+                    Gap(H: 30 + currentValue),
+                    const Text(
+                      "Explore the world of Anime, You can stream thousands of Anime at AnimeRED for free",
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontWeight: AppFontWeight.normal,
+                        fontSize: AppFontSize.medium,
+                      ),
+                    ),
+                    Gap(H: 10 + currentValue),
+                    const Text(
+                      "Enjoy Ad free quality content",
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontWeight: AppFontWeight.normal,
+                        fontSize: AppFontSize.medium,
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    children: [
+                      ThemeButtonWidget(onTap: () {}),
+                      Gap(H: screenHeight * 0.06 - currentValue),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class ThemeButtonWidget extends StatelessWidget {
-  const ThemeButtonWidget({
-    super.key,
-    required this.onTap,
-    this.minWidth,
-    this.backgroundColor = AppColors.red,
-    this.borderRadius = 5,
-  });
-
-  final double? minWidth;
-  final Color backgroundColor;
-  final double borderRadius;
-  final void Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = context.screenWidth;
-    return MaterialButton(
-      elevation: 0,
-      color: backgroundColor,
-      minWidth: minWidth ?? screenWidth * 0.5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      onPressed: onTap,
-      child: const Text(
-        "Explore Now",
-        style: TextStyle(
-          color: AppColors.white,
-          fontWeight: AppFontWeight.bolder,
-          fontSize: AppFontSize.large,
-        ),
+          );
+        },
       ),
     );
   }
