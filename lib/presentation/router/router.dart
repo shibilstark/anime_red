@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:anime_red/presentation/screens/home_screen/home_screen.dart';
 import 'package:anime_red/presentation/screens/landing_screen/landing_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class AppRouter {
       case SETTINGS_SCREEN:
         return _animatePage(const Scaffold());
       case HOME_SCREEN:
-        return _animatePage(const Scaffold());
+        return _animatePage(const HomeScreen());
       default:
         return null;
     }

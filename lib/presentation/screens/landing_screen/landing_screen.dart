@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/theme_button.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
@@ -102,7 +103,15 @@ class LandingWidgetsView extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Column(
                     children: [
-                      ThemeButtonWidget(onTap: () {}),
+                      Hero(
+                        tag: "landing_explore",
+                        child: ThemeButtonWidget(onTap: () {
+                          AppNavigator.push(
+                            context: context,
+                            screenName: AppRouter.HOME_SCREEN,
+                          );
+                        }),
+                      ),
                       Gap(H: screenHeight * 0.06 - currentValue),
                     ],
                   ),

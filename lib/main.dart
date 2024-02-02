@@ -38,10 +38,13 @@ class MainApp extends StatelessWidget {
       minTextAdapt: true,
       builder: (context, child) {
         return MaterialApp(
-          theme: ThemeData(fontFamily: "Comic Neue"),
+          theme: ThemeData(
+            fontFamily: "Comic Neue",
+            scaffoldBackgroundColor: AppColors.black,
+          ),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppRouter.ongeneratedRoute,
-          initialRoute: AppRouter.LANDING_SCREEN,
+          initialRoute: AppRouter.HOME_SCREEN,
         );
       },
     );
