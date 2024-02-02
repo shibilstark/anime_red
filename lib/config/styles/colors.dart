@@ -6,4 +6,5 @@ class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color red = Color(0xFFFF0000);
   static const Color silver = Color(0xFF6E6E6E);
+  static const Color indicator = Color.fromARGB(255, 255, 196, 0);
 }
