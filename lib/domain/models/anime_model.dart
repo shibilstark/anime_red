@@ -14,6 +14,7 @@ class AnimeModel extends Equatable {
   final String otherName;
   final int episodeCount;
   final List<EpisodeModel> episodes;
+  final String? releaseDate;
 
   const AnimeModel({
     required this.id,
@@ -28,6 +29,7 @@ class AnimeModel extends Equatable {
     required this.subOrDub,
     required this.type,
     required this.episodes,
+    required this.releaseDate,
   });
 
   @override

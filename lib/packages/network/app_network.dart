@@ -20,7 +20,7 @@ class AppNetwork {
 
       return Right(res);
     } on DioException catch (e) {
-      log("{${e.message}  code: ${e.response?.realUri}");
+      log("${e.message} link: ${e.response?.realUri} err: ${e.error} code:${e.response?.statusCode} ");
 
       return Left(e.message ?? "Something went wrong on server");
     } catch (e) {

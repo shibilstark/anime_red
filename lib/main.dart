@@ -22,7 +22,7 @@ Future<void> initDependancies() async {
   BuildConfig.instantiate(
     environment: EvnType.dev,
     appName: "AnimeRed",
-    baseUrl: "http://localhost:3000/",
+    baseUrl: "http://localhost:3000",
     requestTimeOut: const Duration(seconds: 15),
   );
 }

@@ -1,7 +1,5 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
-import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
-import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/recent_release.dart';
@@ -24,8 +22,8 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     HomeAppbarWidget(),
-                    Gap(H: 10),
-                    CustomSmallTitleWIdget(title: "Top Airing"),
+                    // Gap(H: 10),
+                    // CustomSmallTitleWIdget(title: "Top Airing"),
                     // Gap(H: 10),
                   ],
                 ),
