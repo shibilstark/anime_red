@@ -58,6 +58,7 @@ class LandingWidgetsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = context.screenHeight;
+    final screenWidth = context.screenWidth;
 
     return Padding(
       padding: AppPadding.normalScreenPadding,
@@ -105,12 +106,22 @@ class LandingWidgetsView extends StatelessWidget {
                     children: [
                       Hero(
                         tag: "landing_explore",
-                        child: ThemeButtonWidget(onTap: () {
-                          AppNavigator.push(
-                            context: context,
-                            screenName: AppRouter.HOME_SCREEN,
-                          );
-                        }),
+                        child: ThemeButtonWidget(
+                            minWidth: screenWidth * 0.5,
+                            child: const Text(
+                              "Explore Now",
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontWeight: AppFontWeight.bolder,
+                                fontSize: AppFontSize.large,
+                              ),
+                            ),
+                            onTap: () {
+                              AppNavigator.push(
+                                context: context,
+                                screenName: AppRouter.HOME_SCREEN,
+                              );
+                            }),
                       ),
                       Gap(H: screenHeight * 0.06 - currentValue),
                     ],

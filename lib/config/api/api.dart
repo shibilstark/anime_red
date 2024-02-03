@@ -9,6 +9,7 @@ class AnimeApi {
   /// Optional
   /// Default 1
   ///
+  /// Parameter Type Query
   /// type:	[int]	The type of anime to get, i.e. sub or dub. 1: Japanese Dub, English Sub; 2: English Dub, No Sub; 3: Chinese Dub, English Sub.
   /// Optional
   /// Default 1
@@ -34,14 +35,23 @@ class AnimeApi {
   /// query:	[Enum]"gogocdn", "streamsb", "vidstreaming"
   /// Optional
   /// Default "gogocdn"
-  static String getAnimeEpisodeStreamingLinks(
-          {required String episodeId, String server = "gogocdn"}) =>
-      "$_baseUrl/anime/gogoanime/watch/$episodeId?server=$server";
+  static String getAnimeEpisodeStreamingLinks({required String episodeId}) =>
+      "$_baseUrl/anime/gogoanime/watch/$episodeId";
 
   /// Parameter Type Path
   /// query:	[String]the title/episodeId of the item you are looking for.
   /// Required
-  static String getAvailableServers(
-          {required String episodeId, String server = "gogocdn"}) =>
+  static String getAvailableServers({required String episodeId}) =>
       "$_baseUrl/anime/gogoanime/servers/$episodeId";
+
+  /// Parameter Type Path
+  /// query:	[String]	The search query; i.e. the title of the item you are looking for.
+  /// Required
+  ///
+  /// Parameter Type Query
+  /// number:	[String]page number
+  /// Optional
+  /// Default 1
+  static String searchForAnimes({required String query}) =>
+      "$_baseUrl/anime/gogoanime/$query";
 }
