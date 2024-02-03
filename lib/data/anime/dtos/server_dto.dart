@@ -1,3 +1,5 @@
+import 'package:anime_red/domain/common_types/enums.dart';
+import 'package:anime_red/domain/models/server_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'server_dto.g.dart';
@@ -19,4 +21,7 @@ class ServerDto {
   }
 
   Map<String, dynamic> toJson() => _$ServerDtoToJson(this);
+
+  ServerModel toModel() =>
+      ServerModel(name: AnimeServerName.fromString(name), url: url);
 }

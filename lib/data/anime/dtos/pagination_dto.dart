@@ -19,16 +19,17 @@ class PaginationDto<T> {
 
   factory PaginationDto.fromMap(
       Map<String, dynamic> map, Function fromJsonModel) {
-    final items = map['datas'] as List?;
+    final items = map['results'] as List;
     return PaginationDto<T>(
         currentPage: int.parse((map['currentPage'] as String)),
         hasNextPage: map['hasNextPage'] as bool,
-        datas: items == null
-            ? List<T>.empty()
-            : List<T>.from(items.map((itemsJson) => fromJsonModel(itemsJson))));
+        datas: List<T>.from(
+            items.map((itemsJson) => fromJsonModel(itemsJson)).toList()));
   }
 
   factory PaginationDto.fromJson(String source, Function fromJsonModel) =>
       PaginationDto.fromMap(
-          json.decode(source) as Map<String, dynamic>, fromJsonModel);
+        json.decode(source) as Map<String, dynamic>,
+        fromJsonModel,
+      );
 }

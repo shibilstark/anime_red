@@ -1,3 +1,4 @@
+import 'package:anime_red/domain/models/episode_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'episode_dto.g.dart';
@@ -22,4 +23,10 @@ class EpisodeDto {
   }
 
   Map<String, dynamic> toJson() => _$EpisodeDtoToJson(this);
+
+  EpisodeModel toModel() => EpisodeModel(
+        id: id,
+        url: url,
+        episodeNumber: episodeNumber,
+      );
 }

@@ -11,7 +11,27 @@ enum StreamingQuality {
   quality360p,
   quality480p,
   quality720p,
-  quality1080p,
+  quality1080p;
+
+  static StreamingQuality fromString(String value) {
+    switch (value) {
+      case "backup":
+        return StreamingQuality.backupQuality;
+      case "360p":
+        return StreamingQuality.quality360p;
+      case "480p":
+        return StreamingQuality.quality480p;
+      case "720p":
+        return StreamingQuality.quality720p;
+      case "1080p":
+        return StreamingQuality.quality1080p;
+      case "default":
+        return StreamingQuality.defaultQuality;
+
+      default:
+        return StreamingQuality.defaultQuality;
+    }
+  }
 }
 
 enum AnimeType {
@@ -48,6 +68,19 @@ enum AnimeServerName {
         return "vidstreaming";
       default:
         return "gogocdn";
+    }
+  }
+
+  static AnimeServerName fromString(String value) {
+    switch (value) {
+      case "gogocdn":
+        return AnimeServerName.gogocdn;
+      case "streamsb":
+        return AnimeServerName.streamsb;
+      case "vidstreaming":
+        return AnimeServerName.vidstreaming;
+      default:
+        return AnimeServerName.gogocdn;
     }
   }
 }

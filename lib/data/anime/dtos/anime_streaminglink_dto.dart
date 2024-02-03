@@ -1,4 +1,7 @@
+import 'package:anime_red/domain/models/anime_streaminglink_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../../domain/common_types/enums.dart';
 
 part 'anime_streaminglink_dto.g.dart';
 
@@ -18,6 +21,11 @@ class AnimeStreamingLinkDto {
   }
 
   Map<String, dynamic> toJson() => _$AnimeStreamingLinkDtoToJson(this);
+
+  AnimeStreamingLinkModel toModel() => AnimeStreamingLinkModel(
+        headers: headers.toModel(),
+        sources: sources.map((e) => e.toModel()).toList(),
+      );
 }
 
 @JsonSerializable()
@@ -39,6 +47,12 @@ class StreamingHeadersDto {
   }
 
   Map<String, dynamic> toJson() => _$StreamingHeadersDtoToJson(this);
+
+  StreamingHeadersModel toModel() => StreamingHeadersModel(
+        referer: referer,
+        watchsb: watchsb,
+        userAgent: userAgent,
+      );
 }
 
 @JsonSerializable()
@@ -60,4 +74,10 @@ class StreamingSourcesDto {
   }
 
   Map<String, dynamic> toJson() => _$StreamingSourcesDtoToJson(this);
+
+  StreamingSourcesModel toModel() => StreamingSourcesModel(
+        url: url,
+        quality: StreamingQuality.fromString(quality),
+        isM3U8: isM3U8,
+      );
 }

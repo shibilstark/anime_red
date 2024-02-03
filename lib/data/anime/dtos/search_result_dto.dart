@@ -1,3 +1,4 @@
+import 'package:anime_red/domain/models/search_result_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'search_result_dto.g.dart';
@@ -31,4 +32,12 @@ class SearchResultDto {
 
   static SearchResultDto fromJsonModel(Map<String, dynamic> json) =>
       SearchResultDto.fromJson(json);
+
+  SearchResultModel toModel() => SearchResultModel(
+        id: id,
+        title: title,
+        image: image,
+        subOrDub: subOrDub,
+        releaseDate: releaseDate,
+      );
 }

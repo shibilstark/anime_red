@@ -1,3 +1,4 @@
+import 'package:anime_red/domain/models/top_airing_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'top_airing_dto.g.dart';
@@ -31,4 +32,12 @@ class TopAiringDto {
 
   static TopAiringDto fromJsonModel(Map<String, dynamic> json) =>
       TopAiringDto.fromJson(json);
+
+  TopAiringModel toModel() => TopAiringModel(
+        id: id,
+        title: title,
+        image: image,
+        url: url,
+        genres: genres,
+      );
 }

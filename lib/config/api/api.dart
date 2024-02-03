@@ -41,8 +41,7 @@ class AnimeApi {
   /// Parameter Type Path
   /// query:	[String]the title/episodeId of the item you are looking for.
   /// Required
-  static String getAvailableServers(
-          {required String episodeId, String server = "gogocdn"}) =>
+  static String getAvailableServers({required String episodeId}) =>
       "$_baseUrl/anime/gogoanime/servers/$episodeId";
 
   /// Parameter Type Path

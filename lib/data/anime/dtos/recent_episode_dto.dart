@@ -1,3 +1,4 @@
+import 'package:anime_red/domain/models/recent_episode_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recent_episode_dto.g.dart';
@@ -34,4 +35,13 @@ class RecentEpisodeDto {
 
   static RecentEpisodeDto fromJsonModel(Map<String, dynamic> json) =>
       RecentEpisodeDto.fromJson(json);
+
+  RecentEpisodeModel toModel() => RecentEpisodeModel(
+        id: id,
+        title: title,
+        image: image,
+        url: url,
+        episodeNumber: episodeNumber,
+        eposodeId: eposodeId,
+      );
 }

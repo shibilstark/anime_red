@@ -1,4 +1,5 @@
 import 'package:anime_red/data/anime/dtos/episode_dto.dart';
+import 'package:anime_red/domain/models/anime_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'anime_dto.g.dart';
@@ -53,4 +54,20 @@ class AnimeDto {
   }
 
   Map<String, dynamic> toJson() => _$AnimeDtoToJson(this);
+
+  AnimeModel toModel() => AnimeModel(
+        id: id,
+        title: title,
+        image: image,
+        url: url,
+        genres: genres,
+        description: description,
+        episodeCount: episodeCount,
+        otherName: otherName,
+        status: status,
+        subOrDub: subOrDub,
+        type: type,
+        episodes: episodes.map((e) => e.toModel()).toList(),
+        releaseDate: releaseDate,
+      );
 }

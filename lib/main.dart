@@ -1,3 +1,4 @@
+import 'package:anime_red/injector/injector.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,8 @@ Future<void> initDependancies() async {
     baseUrl: "http://localhost:3000",
     requestTimeOut: const Duration(seconds: 15),
   );
+
+  await configureInjection();
 }
 
 class MainApp extends StatelessWidget {
