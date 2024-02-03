@@ -47,34 +47,25 @@ class SearchScreenBackButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeIn,
-        tween: Tween(begin: 1, end: 0),
-        builder: (context, valu, child) {
-          return Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 5,
-            ),
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.grey,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Transform.rotate(
-              angle: valu * (-valu - 0.5),
-              child: const Icon(
-                Icons.keyboard_arrow_left_outlined,
-                color: AppColors.white,
-                size: 25,
-              ),
-            ),
-          );
-        });
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 5,
+      ),
+      height: 40,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: AppColors.grey,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: const Icon(
+        Icons.keyboard_arrow_left_outlined,
+        color: AppColors.white,
+        size: 25,
+      ),
+    );
   }
 }
 
