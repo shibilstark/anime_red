@@ -20,7 +20,7 @@ class HomeWatchHistoryWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CustomSmallTitleWIdget(
+        const CustomSmallTitleWidget(
           title: "Watch History",
         ),
         const Gap(H: 10),

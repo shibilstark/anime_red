@@ -25,7 +25,7 @@ class GenreScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const Gap(H: 20),
+              const Gap(H: 10),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -14,7 +14,7 @@ class HomeRecentReleaseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const CustomSmallTitleWIdget(
+        const CustomSmallTitleWidget(
           title: "Recently Released",
         ),
         const Gap(H: 10),

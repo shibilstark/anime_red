@@ -9,7 +9,9 @@ class AppBarTitleTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
+      maxLines: 1,
       style: const TextStyle(
+        overflow: TextOverflow.ellipsis,
         color: AppColors.white,
         fontWeight: AppFontWeight.bold,
         fontSize: AppFontSize.large,

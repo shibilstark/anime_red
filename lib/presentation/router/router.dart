@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:anime_red/presentation/screens/anime_player_screen/anime_player_screen.dart';
 import 'package:anime_red/presentation/screens/genre_search_screen/genre_screen.dart';
 import 'package:anime_red/presentation/screens/home_screen/home_screen.dart';
 import 'package:anime_red/presentation/screens/landing_screen/landing_screen.dart';
@@ -16,6 +17,7 @@ class AppRouter {
   static const SEARCH_SCREEN = "/search";
   static const WATCH_HISTORY_SCREEN = "/watch_history";
   static const GENRE_SCREEN = "/byGenre";
+  static const ANIME_PLAYER_SCREEN = "/anime/watch";
 
   static Route? ongeneratedRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -35,6 +37,10 @@ class AppRouter {
             screenType: HistoryScreenType.watchlist));
       case GENRE_SCREEN:
         return _animatePage(const GenreScreen());
+      case ANIME_PLAYER_SCREEN:
+        return _animatePage(
+          const AnimePlayerScreen(),
+        );
       default:
         return null;
     }
