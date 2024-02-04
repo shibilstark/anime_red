@@ -2,7 +2,9 @@ import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/home/home_bloc.dart';
 import 'widgets/recent_release.dart';
 import 'widgets/search_and_watchlist.dart';
 import 'widgets/top_airing.dart';
@@ -13,6 +15,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<HomeBloc>().add(const HomeLoadData());
+    });
     return const Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

@@ -98,7 +98,7 @@ class AnimeApiService {
       return response.fold((l) => const Left(ClientFailure()), (r) {
         final dto = PaginationDto<RecentEpisodeDto>.fromJson(
           jsonEncode(r.data),
-          SearchResultDto.fromJsonModel,
+          RecentEpisodeDto.fromJsonModel,
         );
 
         final model = PaginationModel<RecentEpisodeModel>(
@@ -143,7 +143,7 @@ class AnimeApiService {
       return response.fold((l) => const Left(ClientFailure()), (r) {
         final dto = PaginationDto<TopAiringDto>.fromJson(
           jsonEncode(r.data),
-          SearchResultDto.fromJsonModel,
+          TopAiringDto.fromJsonModel,
         );
 
         final model = PaginationModel<TopAiringModel>(

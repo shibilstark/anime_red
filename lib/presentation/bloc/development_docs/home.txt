@@ -1,0 +1,8 @@
+Showing data from 3 blocs
+
+
+1 - HomeBloc- Emitting Top Airing Anime
+
+if state = error => error screen (entire home)
+if state = loading => shimmer
+if state = success => data

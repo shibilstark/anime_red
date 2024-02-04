@@ -32,6 +32,7 @@ dependencies:
   injectable: ^1.5.3
   cupertino_icons: ^1.0.6
   smooth_page_indicator: ^1.1.0
+  lottie: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +47,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svgs/
+    - assets/lottie/
 
   fonts:
     - family: Comic Neue
