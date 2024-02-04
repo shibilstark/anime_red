@@ -54,4 +54,7 @@ class AnimeApi {
   /// Default 1
   static String searchForAnimes({required String query}) =>
       "$_baseUrl/anime/gogoanime/$query";
+
+  static String getSameGenreAnime({required String genre}) =>
+      "$_baseUrl/anime/gogoanime/genre/$genre";
 }

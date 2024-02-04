@@ -1,3 +1,4 @@
+import 'package:anime_red/config/api/base_url.dart';
 import 'package:anime_red/injector/injector.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ Future<void> initDependancies() async {
   BuildConfig.instantiate(
     environment: EvnType.dev,
     appName: "AnimeRed",
-    baseUrl: "http://localhost:3000",
+    baseUrl: LIVE_SERVER,
     requestTimeOut: const Duration(seconds: 15),
   );
 

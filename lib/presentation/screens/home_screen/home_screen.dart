@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
 
               Padding(
                 padding: AppPadding.normalScreenPadding,
-                child: HomeSearchAndBookMarkWidget(),
+                child: HomeSearchAndWatchlistWidget(),
               ),
 
               Padding(

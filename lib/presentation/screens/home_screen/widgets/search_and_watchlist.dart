@@ -4,8 +4,8 @@ import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomeSearchAndBookMarkWidget extends StatelessWidget {
-  const HomeSearchAndBookMarkWidget({
+class HomeSearchAndWatchlistWidget extends StatelessWidget {
+  const HomeSearchAndWatchlistWidget({
     super.key,
   });
 
@@ -38,13 +38,13 @@ class HomeSearchAndBookMarkWidget extends StatelessWidget {
         const Column(
           children: [
             Icon(
-              Icons.bookmark_outline_rounded,
+              Icons.favorite_border_rounded,
               color: AppColors.white,
               size: 25,
             ),
             Gap(H: 2),
             Text(
-              "Bookmarks",
+              "Watchlist",
               style: TextStyle(
                 color: AppColors.white,
                 fontWeight: AppFontWeight.bolder,

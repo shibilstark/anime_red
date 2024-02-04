@@ -114,8 +114,9 @@ class _TopAiringSliderWidgetState extends State<TopAiringSliderWidget> {
                 ),
                 const Gap(H: 5),
                 Wrap(
+                  alignment: WrapAlignment.center,
                   spacing: 10,
-                  runSpacing: 20,
+                  runSpacing: 10,
                   children: List.generate(
                     dummyGenres.length,
                     (index) => Container(
