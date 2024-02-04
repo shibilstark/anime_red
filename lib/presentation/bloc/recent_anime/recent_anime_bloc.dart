@@ -2,64 +2,68 @@ import 'package:anime_red/domain/anime/anime_repository/anime_respository.dart';
 import 'package:anime_red/domain/common_types/enums.dart';
 import 'package:anime_red/domain/common_types/failures.dart';
 import 'package:anime_red/domain/models/pagination_model.dart';
-import 'package:anime_red/domain/models/top_airing_model.dart';
+import 'package:anime_red/domain/models/recent_episode_model.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-part 'home_event.dart';
-part 'home_state.dart';
+part 'recent_anime_event.dart';
+part 'recent_anime_state.dart';
 
 @injectable
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+class RecentAnimeBloc extends Bloc<RecentAnimeEvent, RecentAnimeState> {
   final AnimeRepository repository;
-  HomeBloc(this.repository) : super(HomeInitial()) {
-    on<HomeLoadData>(_loadHome);
-    on<HomeAddNextPage>(_addNextPage);
+  RecentAnimeBloc(this.repository) : super(RecentAnimeInitial()) {
+    on<RecentAnimeLoadData>(_loadRecentAnime);
+    on<RecentAnimeAddNextPage>(_addNextPage);
   }
 
-  _loadHome(HomeLoadData event, Emitter<HomeState> emit) async {
-    emit(const HomeLoading());
+  _loadRecentAnime(
+      RecentAnimeLoadData event, Emitter<RecentAnimeState> emit) async {
+    emit(const RecentAnimeLoading());
 
     if (await haveInternetConnection()) {
-      await repository.getTopAiringAnime().then((result) {
+      await repository.getRecentReleases().then((result) {
         result.fold((failure) {
-          emit(HomeFailure(type: failure.type, message: failure.message));
+          emit(
+              RecentAnimeFailure(type: failure.type, message: failure.message));
         }, (model) {
-          emit(HomeSuccess(
+          emit(RecentAnimeSuccess(
             topAnimes: model,
           ));
         });
       });
     } else {
       const failure = InternetFailure();
-      emit(HomeFailure(type: failure.type, message: failure.message));
+      emit(RecentAnimeFailure(type: failure.type, message: failure.message));
     }
   }
 
-  _addNextPage(HomeAddNextPage event, Emitter<HomeState> emit) async {
+  _addNextPage(
+      RecentAnimeAddNextPage event, Emitter<RecentAnimeState> emit) async {
     final currentState = state;
 
-    if (currentState is HomeSuccess && currentState.topAnimes.hasNextPage) {
+    if (currentState is RecentAnimeSuccess &&
+        currentState.topAnimes.hasNextPage) {
       final nextPage = currentState.topAnimes.currentPage + 1;
 
-      await repository.getTopAiringAnime(page: nextPage).then((result) {
+      await repository.getRecentReleases(page: nextPage).then((result) {
         result.fold((failure) {
           emit(
-            HomeSuccess(
+            RecentAnimeSuccess(
               topAnimes: currentState.topAnimes,
               anyError: failure,
             ),
           );
         }, (model) {
-          final updatedPage = PaginationModel<TopAiringModel>(
+          final updatedPage = PaginationModel<RecentEpisodeModel>(
             currentPage: model.currentPage,
             hasNextPage: model.hasNextPage,
             datas: List.from(currentState.topAnimes.datas..addAll(model.datas)),
           );
 
-          emit(HomeSuccess(
+          emit(RecentAnimeSuccess(
             topAnimes: updatedPage,
           ));
         });

@@ -9,7 +9,9 @@ sealed class HomeState extends Equatable {
 
 final class HomeInitial extends HomeState {}
 
-final class HomeLoading extends HomeState {}
+final class HomeLoading extends HomeState {
+  const HomeLoading();
+}
 
 final class HomeFailure extends HomeState {
   final FailureType type;
