@@ -154,30 +154,42 @@ class HomeWatchHistoryWidget extends StatelessWidget {
               AppNavigator.push(
                   context: context, screenName: AppRouter.WATCH_HISTORY_SCREEN);
             },
-            child: Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
-              child: const Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "See full hostory",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: AppFontWeight.normal,
-                      fontSize: AppFontSize.large,
+            child: Hero(
+              tag: "history_hero",
+              flightShuttleBuilder: (flightContext, animation, flightDirection,
+                  fromHeroContext, toHeroContext) {
+                return Material(
+                  color: Colors.transparent,
+                  child: flightDirection == HeroFlightDirection.push
+                      ? toHeroContext.widget
+                      : const SizedBox(),
+                );
+              },
+              child: Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "See full hostory",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontWeight: AppFontWeight.normal,
+                        fontSize: AppFontSize.large,
+                      ),
                     ),
-                  ),
-                  Gap(W: 3),
-                  Icon(
-                    Icons.keyboard_arrow_right,
-                    color: AppColors.white,
-                    size: 25,
-                  ),
-                ],
+                    Gap(W: 3),
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      color: AppColors.white,
+                      size: 25,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

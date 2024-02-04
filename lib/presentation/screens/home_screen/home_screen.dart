@@ -3,7 +3,7 @@ import 'package:anime_red/config/constants/assets.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/recent_release.dart';
-import 'widgets/search_and_bookmark.dart';
+import 'widgets/search_and_watchlist.dart';
 import 'widgets/top_airing.dart';
 import 'widgets/watch_history.dart';
 
