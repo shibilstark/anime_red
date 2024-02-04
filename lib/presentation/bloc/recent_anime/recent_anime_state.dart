@@ -9,7 +9,9 @@ sealed class RecentAnimeState extends Equatable {
 
 final class RecentAnimeInitial extends RecentAnimeState {}
 
-final class RecentAnimeLoading extends RecentAnimeState {}
+final class RecentAnimeLoading extends RecentAnimeState {
+  const RecentAnimeLoading();
+}
 
 final class RecentAnimeFailure extends RecentAnimeState {
   final FailureType type;
