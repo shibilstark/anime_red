@@ -1,5 +1,6 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/presentation/router/router.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/recent_release.dart';
@@ -74,7 +75,10 @@ class HomeAppbarWidget extends StatelessWidget {
         IconButton(
             padding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
-            onPressed: () {},
+            onPressed: () {
+              AppNavigator.push(
+                  context: context, screenName: AppRouter.GENRE_SCREEN);
+            },
             icon: const Icon(
               Icons.settings_outlined,
               color: AppColors.white,
