@@ -4,8 +4,8 @@ import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomeSearchAndBookMarkWidget extends StatelessWidget {
-  const HomeSearchAndBookMarkWidget({
+class HomeSearchAndWatchlistWidget extends StatelessWidget {
+  const HomeSearchAndWatchlistWidget({
     super.key,
   });
 
@@ -35,23 +35,43 @@ class HomeSearchAndBookMarkWidget extends StatelessWidget {
           ),
         )),
         const Gap(W: 10),
-        const Column(
-          children: [
-            Icon(
-              Icons.bookmark_outline_rounded,
-              color: AppColors.white,
-              size: 25,
+        GestureDetector(
+          onTap: () {
+            AppNavigator.push(
+              context: context,
+              screenName: AppRouter.WATCHLIST_SCREEN,
+            );
+          },
+          child: Hero(
+            tag: "watchlist_hero",
+            flightShuttleBuilder: (flightContext, animation, flightDirection,
+                fromHeroContext, toHeroContext) {
+              return Material(
+                color: Colors.transparent,
+                child: flightDirection == HeroFlightDirection.push
+                    ? toHeroContext.widget
+                    : const SizedBox(),
+              );
+            },
+            child: const Column(
+              children: [
+                Icon(
+                  Icons.favorite_border_rounded,
+                  color: AppColors.white,
+                  size: 25,
+                ),
+                Gap(H: 2),
+                Text(
+                  "Watchlist",
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontWeight: AppFontWeight.bolder,
+                    fontSize: AppFontSize.verySmall,
+                  ),
+                ),
+              ],
             ),
-            Gap(H: 2),
-            Text(
-              "Bookmarks",
-              style: TextStyle(
-                color: AppColors.white,
-                fontWeight: AppFontWeight.bolder,
-                fontSize: AppFontSize.verySmall,
-              ),
-            ),
-          ],
+          ),
         )
       ],
     );

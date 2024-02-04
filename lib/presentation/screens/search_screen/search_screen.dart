@@ -30,7 +30,7 @@ class SearchScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const CustomSmallTitleWIdget(
+                    const CustomSmallTitleWidget(
                       title: "Top Airing",
                     ),
                     const Gap(H: 10),

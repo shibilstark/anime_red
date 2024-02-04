@@ -1,5 +1,6 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/theme_button.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
@@ -114,8 +115,9 @@ class _TopAiringSliderWidgetState extends State<TopAiringSliderWidget> {
                 ),
                 const Gap(H: 5),
                 Wrap(
+                  alignment: WrapAlignment.center,
                   spacing: 10,
-                  runSpacing: 20,
+                  runSpacing: 10,
                   children: List.generate(
                     dummyGenres.length,
                     (index) => Container(
@@ -141,7 +143,12 @@ class _TopAiringSliderWidgetState extends State<TopAiringSliderWidget> {
                 ThemeButtonWidget(
                   density: VisualDensity.comfortable,
                   minWidth: context.screenWidth * 0.4,
-                  onTap: () {},
+                  onTap: () {
+                    AppNavigator.push(
+                      context: context,
+                      screenName: AppRouter.ANIME_PLAYER_SCREEN,
+                    );
+                  },
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

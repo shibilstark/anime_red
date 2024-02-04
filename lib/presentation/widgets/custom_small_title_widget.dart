@@ -1,8 +1,8 @@
 import 'package:anime_red/config/config.dart';
 import 'package:flutter/material.dart';
 
-class CustomSmallTitleWIdget extends StatelessWidget {
-  const CustomSmallTitleWIdget({
+class CustomSmallTitleWidget extends StatelessWidget {
+  const CustomSmallTitleWidget({
     super.key,
     required this.title,
   });

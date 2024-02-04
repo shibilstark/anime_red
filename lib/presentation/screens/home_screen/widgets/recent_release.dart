@@ -14,13 +14,13 @@ class HomeRecentReleaseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const CustomSmallTitleWIdget(
+        const CustomSmallTitleWidget(
           title: "Recently Released",
         ),
         const Gap(H: 10),
         GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+            crossAxisCount: 3,
             childAspectRatio: 3 / 5,
             crossAxisSpacing: 20,
             mainAxisSpacing: 25,
@@ -55,7 +55,7 @@ class HomeRecentReleaseWidget extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.white,
                       fontWeight: AppFontWeight.bold,
-                      fontSize: AppFontSize.large,
+                      fontSize: AppFontSize.medium,
                     ),
                   ),
                   Gap(W: 10),
@@ -66,7 +66,7 @@ class HomeRecentReleaseWidget extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.red,
                       fontWeight: AppFontWeight.normal,
-                      fontSize: AppFontSize.medium,
+                      fontSize: AppFontSize.small,
                     ),
                   ),
                 ],

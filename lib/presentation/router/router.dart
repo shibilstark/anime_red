@@ -1,8 +1,11 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:anime_red/presentation/screens/anime_player_screen/anime_player_screen.dart';
+import 'package:anime_red/presentation/screens/genre_search_screen/genre_screen.dart';
 import 'package:anime_red/presentation/screens/home_screen/home_screen.dart';
 import 'package:anime_red/presentation/screens/landing_screen/landing_screen.dart';
 import 'package:anime_red/presentation/screens/search_screen/search_screen.dart';
+import 'package:anime_red/presentation/screens/watchlist_history_screen/watchlist_history_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -10,9 +13,11 @@ class AppRouter {
   static const LANDING_SCREEN = "/landing";
   static const SETTINGS_SCREEN = "/settings";
   static const ANIME_INFO_SCREEN = "/anime_info";
-  static const BOOKMARKS_SCREEN = "/bookmarks";
+  static const WATCHLIST_SCREEN = "/watch_list";
   static const SEARCH_SCREEN = "/search";
-  static const WATCH_HISTORY_SCREEN = "/wath_history";
+  static const WATCH_HISTORY_SCREEN = "/watch_history";
+  static const GENRE_SCREEN = "/byGenre";
+  static const ANIME_PLAYER_SCREEN = "/anime/watch";
 
   static Route? ongeneratedRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -24,6 +29,18 @@ class AppRouter {
         return _animatePage(const HomeScreen());
       case SEARCH_SCREEN:
         return _animatePage(const SearchScreen());
+      case WATCH_HISTORY_SCREEN:
+        return _animatePage(const WatchlistHistoryScreen(
+            screenType: HistoryScreenType.history));
+      case WATCHLIST_SCREEN:
+        return _animatePage(const WatchlistHistoryScreen(
+            screenType: HistoryScreenType.watchlist));
+      case GENRE_SCREEN:
+        return _animatePage(const GenreScreen());
+      case ANIME_PLAYER_SCREEN:
+        return _animatePage(
+          const AnimePlayerScreen(),
+        );
       default:
         return null;
     }
