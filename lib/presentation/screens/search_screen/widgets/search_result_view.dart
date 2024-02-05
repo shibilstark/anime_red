@@ -1,7 +1,9 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/domain/models/search_result_model.dart';
+import 'package:anime_red/presentation/bloc/anime/anime_bloc.dart';
 import 'package:anime_red/presentation/bloc/anime_search/anime_search_bloc.dart';
+import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
 import 'package:anime_red/presentation/widgets/error_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
@@ -136,61 +138,71 @@ class SearchResultTileWidget extends StatelessWidget {
   final SearchResultModel anime;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Stack(
-            children: [
-              Container(
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
+    return GestureDetector(
+      onTap: () {
+        context.read<AnimeBloc>().add(AnimeGetInfo(anime.id));
+
+        AppNavigator.push(
+            context: context,
+            screenName: AppRouter.ANIME_PLAYER_SCREEN,
+            arguments: {"args": (anime.id, anime.title)});
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: NetWorkImageWidget(
+                    image: anime.image,
+                  ),
                 ),
-                child: NetWorkImageWidget(
-                  image: anime.image,
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: AppPadding.normalScreenPadding,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 2,
-                      horizontal: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      color: AppColors.white,
-                    ),
-                    child: Text(
-                      anime.subOrDub,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.red,
-                        fontWeight: AppFontWeight.bolder,
-                        fontSize: AppFontSize.medium,
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: AppPadding.normalScreenPadding,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: AppColors.white,
+                      ),
+                      child: Text(
+                        anime.subOrDub,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: AppColors.red,
+                          fontWeight: AppFontWeight.bolder,
+                          fontSize: AppFontSize.medium,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
-        ),
-        const Gap(H: 5),
-        Text(
-          anime.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: AppColors.white,
-            fontWeight: AppFontWeight.bold,
-            fontSize: AppFontSize.medium,
-          ),
-        )
-      ],
+          const Gap(H: 5),
+          Text(
+            anime.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: AppColors.white,
+              fontWeight: AppFontWeight.bold,
+              fontSize: AppFontSize.medium,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

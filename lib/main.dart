@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'config/config.dart';
+import 'presentation/bloc/anime/anime_bloc.dart';
 
 void main() async {
   await initDependancies();
@@ -48,6 +49,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (_) => getIt<HomeBloc>()),
         BlocProvider(create: (_) => getIt<RecentAnimeBloc>()),
         BlocProvider(create: (_) => getIt<AnimeSearchBloc>()),
+        BlocProvider(create: (_) => getIt<AnimeBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),

@@ -4,17 +4,31 @@ import 'dart:ui';
 
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/domain/models/anime_model.dart';
+import 'package:anime_red/presentation/bloc/anime/anime_bloc.dart';
 import 'package:anime_red/presentation/widgets/appbar_text.dart';
 import 'package:anime_red/presentation/widgets/common_back_button.dart';
-import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
+import 'package:anime_red/presentation/widgets/network_image_widget.dart';
+import 'package:anime_red/presentation/widgets/shimmer_widget.dart';
 import 'package:anime_red/presentation/widgets/theme_button.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:readmore/readmore.dart';
+
+import '../../widgets/error_widget.dart';
 
 class AnimePlayerScreen extends StatefulWidget {
-  const AnimePlayerScreen({super.key});
+  const AnimePlayerScreen({
+    super.key,
+    required this.animeId,
+    required this.animeTitle,
+  });
+  final String animeId;
+
+  final String animeTitle;
 
   @override
   State<AnimePlayerScreen> createState() => _AnimePlayerScreenState();
@@ -42,14 +56,17 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
               builder: (context, isPlayerMode, _) {
                 return Column(
                   children: [
-                    const Padding(
+                    // AppBar
+                    Padding(
                       padding: AppPadding.normalScreenPadding,
                       child: Row(
                         children: [
-                          CommonBackButtonWidget(),
-                          Gap(W: 10),
-                          AppBarTitleTextWidget(
-                            title: "Naruto Shippuden",
+                          const CommonBackButtonWidget(),
+                          const Gap(W: 10),
+                          Expanded(
+                            child: AppBarTitleTextWidget(
+                              title: widget.animeTitle,
+                            ),
                           ),
                         ],
                       ),
@@ -58,72 +75,71 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
 
                     // DONT NEED PADDING
 
-                    AnimePlayerWidget(
-                      isPlayerMode: isPlayerMode,
-                    ),
+                    BlocBuilder<AnimeBloc, AnimeState>(
+                        builder: (context, state) {
+                      if (state is AnimeFailure) {
+                        return Center(
+                          child: AppErrorWidget(
+                            errorMessage: state.message,
+                            onTap: () {
+                              context
+                                  .read<AnimeBloc>()
+                                  .add(AnimeGetInfo(widget.animeId));
+                            },
+                          ),
+                        );
+                      }
 
-                    const AnimeInfoWidget(),
-
-                    //  NEED PADDING
-                    Padding(
-                      padding: AppPadding.normalScreenPadding,
-                      child: ThemeButtonWidget(
-                        density: VisualDensity.comfortable,
-                        minWidth: double.infinity,
-                        onTap: () {
-                          playerMode.value = !isPlayerMode;
-                          playerMode.notifyListeners();
-                          _scrollController.animateTo(0,
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeIn);
-                        },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
+                      if (state is AnimeSuccess) {
+                        return Column(
                           children: [
-                            Text(
-                              "Play",
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontWeight: AppFontWeight.bolder,
-                                fontSize: AppFontSize.large,
+                            AnimePlayerWidget(
+                              isPlayerMode: isPlayerMode,
+                            ),
+
+                            AnimeInfoWidget(anime: state.anime),
+
+                            //  NEED PADDING
+                            Padding(
+                              padding: AppPadding.normalScreenPadding,
+                              child: ThemeButtonWidget(
+                                density: VisualDensity.comfortable,
+                                minWidth: double.infinity,
+                                onTap: () {
+                                  playerMode.value = !isPlayerMode;
+                                  playerMode.notifyListeners();
+                                  _scrollController.animateTo(0,
+                                      duration:
+                                          const Duration(milliseconds: 400),
+                                      curve: Curves.easeIn);
+                                },
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Play",
+                                      style: TextStyle(
+                                        color: AppColors.white,
+                                        fontWeight: AppFontWeight.bolder,
+                                        fontSize: AppFontSize.large,
+                                      ),
+                                    ),
+                                    Gap(W: 10),
+                                    Icon(
+                                      CupertinoIcons.play_fill,
+                                      color: AppColors.white,
+                                      size: 15,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                            Gap(W: 10),
-                            Icon(
-                              CupertinoIcons.play_fill,
-                              color: AppColors.white,
-                              size: 15,
-                            )
                           ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppPadding.normalScreenPadding.left,
-                      ),
-                      child: const Column(
-                        children: [
-                          CustomSmallTitleWidget(title: "Similar Animes"),
-                        ],
-                      ),
-                    ),
-                    const Gap(H: 10),
+                        );
+                      }
 
-                    GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 3 / 5,
-                        crossAxisSpacing: 15,
-                        mainAxisSpacing: 15,
-                      ),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) =>
-                          const SimilarAnimeTileWidget(),
-                      itemCount: 10,
-                    )
+                      return const AnimeInfoShimmerWidget();
+                    }),
                   ],
                 );
               }),
@@ -168,31 +184,24 @@ class _AnimePlayerWidgetState extends State<AnimePlayerWidget> {
 class AnimeInfoWidget extends StatelessWidget {
   const AnimeInfoWidget({
     super.key,
+    required this.anime,
   });
+
+  final AnimeModel anime;
 
   @override
   Widget build(BuildContext context) {
-    return const Stack(
+    return Stack(
       children: [
-        MovieInfoBackgroundWidget(),
-        AnimeInfoForegroundWidget(),
+        MovieInfoBackgroundWidget(image: anime.image),
+        AnimeInfoForegroundWidget(anime: anime),
       ],
     );
   }
 }
 
-final dummyGenres = [
-  "Romance",
-  "Action",
-  "Adventure",
-  "Comedy",
-  "Romance",
-];
-
-class AnimeInfoForegroundWidget extends StatelessWidget {
-  const AnimeInfoForegroundWidget({
-    super.key,
-  });
+class AnimeInfoShimmerWidget extends StatelessWidget {
+  const AnimeInfoShimmerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -216,12 +225,95 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
                         color: AppColors.grey,
                       ),
                       borderRadius: BorderRadius.circular(5),
-                      image: const DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          AppImageAssets.landgingBg,
+                    ),
+                    child: const ShimmerWidget(),
+                  ),
+                ),
+              ),
+              const Gap(W: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShimmerWidget(
+                      height: 30,
+                      width: context.screenWidth * 0.5,
+                    ),
+                    const Gap(H: 10),
+                    const ShimmerWidget(
+                      height: 20,
+                      width: 30,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const Gap(H: 20),
+          Wrap(
+            alignment: WrapAlignment.start,
+            spacing: 10,
+            runSpacing: 10,
+            children: List.generate(
+                3,
+                (index) => ShimmerWidget(
+                      height: 20,
+                      width: context.screenWidth * 0.2,
+                    )),
+          ),
+          const Gap(H: 15),
+          const ShimmerWidget(
+            width: double.infinity,
+            height: 40,
+          ),
+          const Gap(H: 10),
+        ],
+      ),
+    );
+  }
+}
+
+final dummyGenres = [
+  "Romance",
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Romance",
+];
+
+class AnimeInfoForegroundWidget extends StatelessWidget {
+  const AnimeInfoForegroundWidget({
+    super.key,
+    required this.anime,
+  });
+
+  final AnimeModel anime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: AppPadding.normalScreenPadding,
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: context.screenWidth * 0.25,
+                child: AspectRatio(
+                  aspectRatio: 3 / 4,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.grey,
                         ),
                       ),
+                      child: NetWorkImageWidget(image: anime.image),
                     ),
                   ),
                 ),
@@ -231,10 +323,10 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Itachi Uchiha: The Legend & The Shadow Assassin",
+                    Text(
+                      anime.title,
                       overflow: TextOverflow.clip,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.white,
                         fontWeight: AppFontWeight.bolder,
                         fontSize: AppFontSize.largeTitle,
@@ -250,11 +342,11 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(3),
                         color: AppColors.white,
                       ),
-                      child: const Text(
-                        "SUB",
+                      child: Text(
+                        anime.subOrDub,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: AppColors.red,
                           fontWeight: AppFontWeight.bolder,
                           fontSize: AppFontSize.verySmall,
@@ -272,7 +364,7 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: List.generate(
-              dummyGenres.length,
+              anime.genres.length,
               (index) => Container(
                 decoration: BoxDecoration(
                     color: AppColors.grey,
@@ -282,7 +374,7 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
                   horizontal: 6,
                 ),
                 child: Text(
-                  dummyGenres[index],
+                  anime.genres[index],
                   style: const TextStyle(
                     color: AppColors.white,
                     fontWeight: AppFontWeight.bold,
@@ -293,43 +385,67 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
             ),
           ),
           const Gap(H: 15),
+
           Container(
-            decoration: BoxDecoration(
-                color: AppColors.grey.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: AppColors.grey,
-                  width: 1,
-                )),
-            padding: const EdgeInsets.symmetric(
-              vertical: 5,
-              horizontal: 5,
-            ),
-            child: const Text(
-              "Explore the world of Anime, You can stream thousands of Anime at AnimeRED for free Explore the world of Anime, You can stream thousands of Anime at AnimeRED for free ",
-              style: TextStyle(
-                color: AppColors.white,
-                fontWeight: AppFontWeight.medium,
-                fontSize: AppFontSize.small,
+              decoration: BoxDecoration(
+                  color: AppColors.grey.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: AppColors.grey,
+                    width: 1,
+                  )),
+              padding: const EdgeInsets.symmetric(
+                vertical: 5,
+                horizontal: 5,
               ),
-            ),
-          ),
+              child: ReadMoreText(
+                anime.description ?? "No Description Found",
+                trimLines: 3,
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontWeight: AppFontWeight.medium,
+                  fontSize: AppFontSize.small,
+                ),
+                colorClickableText: Colors.pink,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: ' Show more',
+                trimExpandedText: ' Show less',
+                moreStyle: const TextStyle(
+                  fontSize: AppFontSize.small,
+                  fontWeight: AppFontWeight.bold,
+                  color: AppColors.indicator,
+                ),
+              )),
           const Gap(H: 10),
-          const AnimeInfoKeyValuePairWidget(
+
+          AnimeInfoKeyValuePairWidget(
             titleKey: "Alternative Name:",
-            value: "The Legend of Uchiha, The Shadoe of Salamandar",
+            value: anime.otherName,
           ),
           const Gap(H: 5),
-          const AnimeInfoKeyValuePairWidget(
+          AnimeInfoKeyValuePairWidget(
+            titleKey: "No of Episodes",
+            value: anime.episodeCount.toString(),
+          ),
+          const Gap(H: 5),
+          AnimeInfoKeyValuePairWidget(
+            titleKey: "Status",
+            value: anime.status,
+          ),
+          const Gap(H: 5),
+          AnimeInfoKeyValuePairWidget(
             titleKey: "Release Date: ",
-            value: "13/10/2023",
+            value: anime.releaseDate ?? "Not Available",
           ),
           const Gap(H: 5),
-          const AnimeInfoKeyValuePairWidget(
-            titleKey: "Alternative Name:",
-            value: "The Legend of Uchiha, The Shadoe of Salamandar",
+          AnimeInfoKeyValuePairWidget(
+            titleKey: "Type",
+            value: anime.type ?? "Not Available",
           ),
+
           const Gap(H: 15),
+
+          /// TODO WATCHLIST FUNCTIONALITY
           // INACTIVE
           Align(
             alignment: Alignment.centerRight,
@@ -447,8 +563,8 @@ class AnimeInfoKeyValuePairWidget extends StatelessWidget {
           child: Text(
             value,
             style: const TextStyle(
-              color: AppColors.white,
-              fontWeight: AppFontWeight.bold,
+              color: AppColors.indicator,
+              fontWeight: AppFontWeight.normal,
               fontSize: AppFontSize.small,
             ),
           ),
@@ -461,28 +577,28 @@ class AnimeInfoKeyValuePairWidget extends StatelessWidget {
 class MovieInfoBackgroundWidget extends StatelessWidget {
   const MovieInfoBackgroundWidget({
     super.key,
+    required this.image,
   });
+
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(
-              AppImageAssets.landgingBg,
+      child: Stack(
+        children: [
+          ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+              child: NetWorkImageWidget(image: image),
             ),
           ),
-        ),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-            child: Container(
-              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.8),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

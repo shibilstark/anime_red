@@ -45,8 +45,14 @@ class AppRouter {
           type: GenreScreenType.recentEpisodes,
         ));
       case ANIME_PLAYER_SCREEN:
+        final (id, title) = (settings.arguments as Map<String, dynamic>)["args"]
+            as (String, String);
+
         return _animatePage(
-          const AnimePlayerScreen(),
+          AnimePlayerScreen(
+            animeId: id,
+            animeTitle: title,
+          ),
         );
       default:
         return null;

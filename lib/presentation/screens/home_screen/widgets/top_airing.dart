@@ -3,6 +3,7 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
 import 'package:anime_red/domain/models/top_airing_model.dart';
+import 'package:anime_red/presentation/bloc/anime/anime_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/network_image_widget.dart';
@@ -40,8 +41,6 @@ class _TopAiringSliderWidgetState extends State<TopAiringSliderWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        if (state is HomeFailure) {}
-
         if (state is HomeSuccess) {
           final animes = state.topAnimes.datas.take(10).toList();
 
@@ -183,10 +182,12 @@ class TopAiringTitlesWidget extends StatelessWidget {
               density: VisualDensity.comfortable,
               minWidth: context.screenWidth * 0.4,
               onTap: () {
+                context.read<AnimeBloc>().add(AnimeGetInfo(anime.id));
+
                 AppNavigator.push(
-                  context: context,
-                  screenName: AppRouter.ANIME_PLAYER_SCREEN,
-                );
+                    context: context,
+                    screenName: AppRouter.ANIME_PLAYER_SCREEN,
+                    arguments: {"args": (anime.id, anime.title)});
               },
               child: const Row(
                 mainAxisSize: MainAxisSize.min,

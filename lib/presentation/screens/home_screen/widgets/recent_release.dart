@@ -1,5 +1,6 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/domain/models/recent_episode_model.dart';
+import 'package:anime_red/presentation/bloc/anime/anime_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
@@ -81,7 +82,6 @@ class HomeRecentReleaseWidget extends StatelessWidget {
             ],
           );
         }
-        // if (state is RecentAnimeFailure) {}
 
         return const RecentAnimeLoadingBuilderWidget();
       },
@@ -154,46 +154,56 @@ class RecentReleaseTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: NetWorkImageWidget(
-              image: anime.image,
+    return GestureDetector(
+      onTap: () {
+        context.read<AnimeBloc>().add(AnimeGetInfo(anime.id));
+
+        AppNavigator.push(
+            context: context,
+            screenName: AppRouter.ANIME_PLAYER_SCREEN,
+            arguments: {"args": (anime.id, anime.title)});
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              height: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: NetWorkImageWidget(
+                image: anime.image,
+              ),
             ),
           ),
-        ),
-        const Gap(H: 5),
-        Column(
-          children: [
-            Text(
-              anime.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontWeight: AppFontWeight.bold,
-                fontSize: AppFontSize.small,
+          const Gap(H: 5),
+          Column(
+            children: [
+              Text(
+                anime.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontWeight: AppFontWeight.bold,
+                  fontSize: AppFontSize.small,
+                ),
               ),
-            ),
-            const Gap(W: 10),
-            Text(
-              "EP ${anime.episodeNumber}",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppColors.red,
-                fontWeight: AppFontWeight.normal,
-                fontSize: AppFontSize.small,
+              const Gap(W: 10),
+              Text(
+                "EP ${anime.episodeNumber}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: AppColors.red,
+                  fontWeight: AppFontWeight.normal,
+                  fontSize: AppFontSize.small,
+                ),
               ),
-            ),
-          ],
-        )
-      ],
+            ],
+          )
+        ],
+      ),
     );
   }
 }

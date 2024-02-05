@@ -21,57 +21,64 @@ class HomeScreen extends StatelessWidget {
       context.read<HomeBloc>().add(const HomeLoadData());
       context.read<RecentAnimeBloc>().add(const RecentAnimeLoadData());
     });
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Padding(
-                padding: AppPadding.normalScreenPadding,
-                child: Column(
-                  children: [
-                    HomeAppbarWidget(),
-                    // Gap(H: 10),
-                    // CustomSmallTitleWIdget(title: "Top Airing"),
-                    // Gap(H: 10),
-                  ],
-                ),
-              ),
 
-              // DON"T NEED ANY PADDING HERE
-              BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  if (state is HomeFailure) {
-                    return Center(
-                      child: AppErrorWidget(
-                        onTap: () {
-                          // TODO IMPLEMENT ALL STARTUP FUNCTIONS RETRY
-                        },
-                        errorMessage: state.message,
-                      ),
-                    );
-                  }
-                  return const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    final PageStorageBucket homeBucket = PageStorageBucket();
+    return PageStorage(
+      bucket: homeBucket,
+      key: UniqueKey(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: AppPadding.normalScreenPadding,
+                  child: Column(
                     children: [
-                      TopAiringSliderWidget(),
-                      Padding(
-                        padding: AppPadding.normalScreenPadding,
-                        child: HomeSearchAndWatchlistWidget(),
-                      ),
-                      Padding(
-                        padding: AppPadding.normalScreenPadding,
-                        child: HomeWatchHistoryWidget(),
-                      ),
-                      Padding(
-                        padding: AppPadding.normalScreenPadding,
-                        child: HomeRecentReleaseWidget(),
-                      ),
+                      HomeAppbarWidget(),
+                      // Gap(H: 10),
+                      // CustomSmallTitleWIdget(title: "Top Airing"),
+                      // Gap(H: 10),
                     ],
-                  );
-                },
-              ),
-            ],
+                  ),
+                ),
+
+                // DON"T NEED ANY PADDING HERE
+                BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) {
+                    if (state is HomeFailure) {
+                      return Center(
+                        child: AppErrorWidget(
+                          onTap: () {
+                            // TODO IMPLEMENT ALL STARTUP FUNCTIONS RETRY
+                          },
+                          errorMessage: state.message,
+                        ),
+                      );
+                    }
+                    return const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TopAiringSliderWidget(),
+                        Padding(
+                          padding: AppPadding.normalScreenPadding,
+                          child: HomeSearchAndWatchlistWidget(),
+                        ),
+                        Padding(
+                          padding: AppPadding.normalScreenPadding,
+                          child: HomeWatchHistoryWidget(),
+                        ),
+                        Padding(
+                          padding: AppPadding.normalScreenPadding,
+                          child: HomeRecentReleaseWidget(),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
