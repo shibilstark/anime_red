@@ -46,14 +46,15 @@ class RecentAnimeBloc extends Bloc<RecentAnimeEvent, RecentAnimeState> {
 
     if (currentState is RecentAnimeSuccess &&
         currentState.recentAnimes.hasNextPage) {
+      emit(
+        RecentAnimeSuccess(
+          recentAnimes: currentState.recentAnimes,
+          isLoading: true,
+        ),
+      );
       if (await haveInternetConnection()) {
-        await Future.delayed(const Duration(seconds: 2));
-        emit(
-          RecentAnimeSuccess(
-            recentAnimes: currentState.recentAnimes,
-            isLoading: true,
-          ),
-        );
+        await Future.delayed(const Duration(seconds: 1));
+
         final nextPage = currentState.recentAnimes.currentPage + 1;
 
         await repository.getRecentReleases(page: nextPage).then((result) {

@@ -5,10 +5,43 @@ import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RecentReleasesExpandedView extends StatelessWidget {
+class RecentReleasesExpandedView extends StatefulWidget {
   const RecentReleasesExpandedView({
     super.key,
   });
+
+  @override
+  State<RecentReleasesExpandedView> createState() =>
+      _RecentReleasesExpandedViewState();
+}
+
+class _RecentReleasesExpandedViewState
+    extends State<RecentReleasesExpandedView> {
+  late final ScrollController scrollController;
+
+  @override
+  void initState() {
+    scrollController = ScrollController();
+    scrollController.addListener(_nextPageLoader);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(_nextPageLoader);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  _nextPageLoader() {
+    final currentState = context.read<RecentAnimeBloc>().state;
+
+    if (currentState is RecentAnimeSuccess) {
+      if (currentState.recentAnimes.hasNextPage && !currentState.isLoading) {
+        context.read<RecentAnimeBloc>().add(const RecentAnimeAddNextPage());
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +85,21 @@ class RecentReleasesExpandedView extends StatelessWidget {
           );
         }
 
-        return const RecentAnimeLoadingBuilderWidget();
+        return Expanded(
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 3 / 5,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
+            ),
+            // shrinkWrap: true,
+            itemBuilder: (context, index) =>
+                const RecentAnimeLoadingTileWidget(),
+            itemCount: 9,
+          ),
+        );
       },
     );
   }

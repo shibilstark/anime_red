@@ -11,13 +11,18 @@ enum GenreScreenType {
   recentEpisodes,
 }
 
-class GenreScreen extends StatelessWidget {
+class GenreScreen extends StatefulWidget {
   final GenreScreenType type;
   const GenreScreen({
     super.key,
     required this.type,
   });
 
+  @override
+  State<GenreScreen> createState() => _GenreScreenState();
+}
+
+class _GenreScreenState extends State<GenreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,14 +36,14 @@ class GenreScreen extends StatelessWidget {
                   const CommonBackButtonWidget(),
                   const Gap(W: 10),
                   AppBarTitleTextWidget(
-                    title: type == GenreScreenType.recentEpisodes
+                    title: widget.type == GenreScreenType.recentEpisodes
                         ? "Recent Releases"
                         : "Romance",
                   ),
                 ],
               ),
               const Gap(H: 10),
-              type == GenreScreenType.recentEpisodes
+              widget.type == GenreScreenType.recentEpisodes
                   ? const RecentReleasesExpandedView()
                   : Expanded(
                       child: GridView.builder(
