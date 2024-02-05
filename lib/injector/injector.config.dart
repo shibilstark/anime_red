@@ -10,8 +10,9 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../data/anime/anime_repository_impl/anime_repository_impl.dart' as _i4;
 import '../domain/anime/anime_repository/anime_respository.dart' as _i3;
-import '../presentation/bloc/home/home_bloc.dart'
-    as _i5; // ignore_for_file: unnecessary_lambdas
+import '../presentation/bloc/home/home_bloc.dart' as _i5;
+import '../presentation/bloc/recent_anime/recent_anime_bloc.dart'
+    as _i6; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -27,5 +28,7 @@ _i1.GetIt $initGetIt(
   );
   gh.factory<_i3.AnimeRepository>(() => _i4.AnimeRepositoryImpl());
   gh.factory<_i5.HomeBloc>(() => _i5.HomeBloc(get<_i3.AnimeRepository>()));
+  gh.factory<_i6.RecentAnimeBloc>(
+      () => _i6.RecentAnimeBloc(get<_i3.AnimeRepository>()));
   return get;
 }

@@ -28,15 +28,18 @@ final class HomeFailure extends HomeState {
 final class HomeSuccess extends HomeState {
   final PaginationModel<TopAiringModel> topAnimes;
   final AppFailure? anyError;
+  final bool isLoading;
 
   const HomeSuccess({
     required this.topAnimes,
     this.anyError,
+    this.isLoading = false,
   });
 
   @override
   List<Object?> get props => [
         topAnimes,
         anyError,
+        isLoading,
       ];
 }

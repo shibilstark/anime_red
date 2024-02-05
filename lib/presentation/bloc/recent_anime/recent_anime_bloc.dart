@@ -30,7 +30,7 @@ class RecentAnimeBloc extends Bloc<RecentAnimeEvent, RecentAnimeState> {
               RecentAnimeFailure(type: failure.type, message: failure.message));
         }, (model) {
           emit(RecentAnimeSuccess(
-            topAnimes: model,
+            recentAnimes: model,
           ));
         });
       });
@@ -45,15 +45,22 @@ class RecentAnimeBloc extends Bloc<RecentAnimeEvent, RecentAnimeState> {
     final currentState = state;
 
     if (currentState is RecentAnimeSuccess &&
-        currentState.topAnimes.hasNextPage) {
+        currentState.recentAnimes.hasNextPage) {
       if (await haveInternetConnection()) {
-        final nextPage = currentState.topAnimes.currentPage + 1;
+        await Future.delayed(const Duration(seconds: 2));
+        emit(
+          RecentAnimeSuccess(
+            recentAnimes: currentState.recentAnimes,
+            isLoading: true,
+          ),
+        );
+        final nextPage = currentState.recentAnimes.currentPage + 1;
 
         await repository.getRecentReleases(page: nextPage).then((result) {
           result.fold((failure) {
             emit(
               RecentAnimeSuccess(
-                topAnimes: currentState.topAnimes,
+                recentAnimes: currentState.recentAnimes,
                 anyError: failure,
               ),
             );
@@ -61,22 +68,23 @@ class RecentAnimeBloc extends Bloc<RecentAnimeEvent, RecentAnimeState> {
             final updatedPage = PaginationModel<RecentEpisodeModel>(
               currentPage: model.currentPage,
               hasNextPage: model.hasNextPage,
-              datas:
-                  List.from(currentState.topAnimes.datas..addAll(model.datas)),
+              datas: List.from(
+                  currentState.recentAnimes.datas..addAll(model.datas)),
             );
 
             emit(RecentAnimeSuccess(
-              topAnimes: updatedPage,
+              recentAnimes: updatedPage,
             ));
           });
         });
-      }else{      const failure = InternetFailure();
-          emit(
-              RecentAnimeSuccess(
-                topAnimes: currentState.topAnimes,
-                anyError: failure,
-              ),
-            );
+      } else {
+        const failure = InternetFailure();
+        emit(
+          RecentAnimeSuccess(
+            recentAnimes: currentState.recentAnimes,
+            anyError: failure,
+          ),
+        );
       }
     }
   }

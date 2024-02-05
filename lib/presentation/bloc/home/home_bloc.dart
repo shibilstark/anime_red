@@ -43,6 +43,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (currentState is HomeSuccess && currentState.topAnimes.hasNextPage) {
       if (await haveInternetConnection()) {
+        emit(
+          HomeSuccess(
+            topAnimes: currentState.topAnimes,
+            isLoading: true,
+          ),
+        );
+
         final nextPage = currentState.topAnimes.currentPage + 1;
 
         await repository.getTopAiringAnime(page: nextPage).then((result) {

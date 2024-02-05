@@ -17,6 +17,7 @@ class AppRouter {
   static const SEARCH_SCREEN = "/search";
   static const WATCH_HISTORY_SCREEN = "/watch_history";
   static const GENRE_SCREEN = "/byGenre";
+  static const RECENT_EPISODES_SCREEN = "/recentEpisodes";
   static const ANIME_PLAYER_SCREEN = "/anime/watch";
 
   static Route? ongeneratedRoute(RouteSettings settings) {
@@ -36,7 +37,13 @@ class AppRouter {
         return _animatePage(const WatchlistHistoryScreen(
             screenType: HistoryScreenType.watchlist));
       case GENRE_SCREEN:
-        return _animatePage(const GenreScreen());
+        return _animatePage(const GenreScreen(
+          type: GenreScreenType.genre,
+        ));
+      case RECENT_EPISODES_SCREEN:
+        return _animatePage(const GenreScreen(
+          type: GenreScreenType.recentEpisodes,
+        ));
       case ANIME_PLAYER_SCREEN:
         return _animatePage(
           const AnimePlayerScreen(),

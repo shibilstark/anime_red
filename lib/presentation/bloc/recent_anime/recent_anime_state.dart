@@ -26,17 +26,20 @@ final class RecentAnimeFailure extends RecentAnimeState {
 }
 
 final class RecentAnimeSuccess extends RecentAnimeState {
-  final PaginationModel<RecentEpisodeModel> topAnimes;
+  final PaginationModel<RecentEpisodeModel> recentAnimes;
   final AppFailure? anyError;
+  final bool isLoading;
 
   const RecentAnimeSuccess({
-    required this.topAnimes,
+    required this.recentAnimes,
     this.anyError,
+    this.isLoading = false,
   });
 
   @override
   List<Object?> get props => [
-        topAnimes,
+        recentAnimes,
         anyError,
+        isLoading,
       ];
 }

@@ -1,6 +1,7 @@
 import 'package:anime_red/config/api/base_url.dart';
 import 'package:anime_red/injector/injector.dart';
 import 'package:anime_red/presentation/bloc/home/home_bloc.dart';
+import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +45,7 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<HomeBloc>()),
+        BlocProvider(create: (_) => getIt<RecentAnimeBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),
