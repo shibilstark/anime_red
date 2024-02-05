@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/domain/models/anime_model.dart';
+import 'package:anime_red/presentation/screens/anime_player_screen/anime_player_screen.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/network_image_widget.dart';
 import 'package:anime_red/presentation/widgets/shimmer_widget.dart';
@@ -91,7 +92,7 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
                         color: AppColors.white,
                       ),
                       child: Text(
-                        anime.subOrDub,
+                        anime.subOrDub.toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -136,6 +137,7 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
 
           AnimatedContainer(
               duration: const Duration(seconds: 1),
+              width: double.infinity,
               curve: Curves.easeIn,
               decoration: BoxDecoration(
                   color: AppColors.grey.withOpacity(0.5),
@@ -421,6 +423,7 @@ class AnimeInfoShimmerWidget extends StatelessWidget {
             height: 40,
           ),
           const Gap(H: 10),
+          const EpisodeListShimmerWidget()
         ],
       ),
     );

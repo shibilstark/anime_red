@@ -5,6 +5,7 @@ import 'package:anime_red/presentation/bloc/anime_search/anime_search_bloc.dart'
 import 'package:anime_red/presentation/screens/search_screen/widgets/idle_view.dart';
 import 'package:anime_red/presentation/screens/search_screen/widgets/search_appbar.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
+import 'package:anime_red/utils/debouncer/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,11 +21,13 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController textController;
   late final FocusNode focusNode;
+  late final Debouncer debouncer;
 
   @override
   void initState() {
     textController = TextEditingController();
     focusNode = FocusNode();
+    debouncer = Debouncer();
     super.initState();
   }
 
@@ -43,17 +46,19 @@ class _SearchScreenState extends State<SearchScreen> {
                 controller: textController,
                 node: focusNode,
                 onChanged: (text) {
-                  if (text.trim().isNotEmpty) {
-                    context.read<AnimeSearchBloc>().add(
-                          AnimeSearchQuery(text.trim()),
-                        );
-                  }
+                  debouncer.run(() {
+                    if (text.trim().isNotEmpty) {
+                      context.read<AnimeSearchBloc>().add(
+                            AnimeSearchQuery(text.trim()),
+                          );
+                    }
 
-                  if (text.trim().isEmpty) {
-                    focusNode.unfocus();
-                  }
+                    if (text.trim().isEmpty) {
+                      focusNode.unfocus();
+                    }
 
-                  textController.notifyListeners();
+                    textController.notifyListeners();
+                  });
                 },
               ),
               const Gap(H: 10),

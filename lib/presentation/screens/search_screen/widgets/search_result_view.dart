@@ -175,7 +175,7 @@ class SearchResultTileWidget extends StatelessWidget {
                         color: AppColors.white,
                       ),
                       child: Text(
-                        anime.subOrDub,
+                        anime.subOrDub.toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
