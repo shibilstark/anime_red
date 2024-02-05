@@ -115,6 +115,9 @@ class EpisodesGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showingAnimeList = anime.episodes
+        .getRange(currentSection.start, currentSection.end + 1)
+        .toList();
     return GridView.builder(
       physics: const ClampingScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -125,30 +128,33 @@ class EpisodesGridWidget extends StatelessWidget {
       ),
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  width: 1,
-                  color: AppColors.grey,
-                )),
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Text(
-                  anime.episodes
-                      .getRange(currentSection.start, currentSection.end + 1)
-                      .toList()[index]
-                      .episodeNumber
-                      .toString(),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: AppFontSize.small,
-                    fontWeight: AppFontWeight.normal,
+        final thisEpisode = showingAnimeList[index];
+        return GestureDetector(
+          onTap: () {
+            // TODO
+            // log("episode Id = ${thisEpisode.id}");
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    width: 1,
+                    color: AppColors.grey,
+                  )),
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Text(
+                    thisEpisode.episodeNumber.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColors.white,
+                      fontSize: AppFontSize.small,
+                      fontWeight: AppFontWeight.normal,
+                    ),
                   ),
                 ),
               ),

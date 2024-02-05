@@ -28,15 +28,18 @@ final class AnimeFailure extends AnimeState {
 final class AnimeSuccess extends AnimeState {
   final AnimeModel anime;
   final List<StartEndModel> startEndList;
+  final EitherFailure<AnimePlayerDataModel>? playerData;
 
   const AnimeSuccess({
     required this.anime,
     required this.startEndList,
+    this.playerData,
   });
 
   @override
   List<Object?> get props => [
         anime,
         startEndList,
+        playerData,
       ];
 }
