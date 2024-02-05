@@ -46,28 +46,38 @@ class RecentAnimeBloc extends Bloc<RecentAnimeEvent, RecentAnimeState> {
 
     if (currentState is RecentAnimeSuccess &&
         currentState.topAnimes.hasNextPage) {
-      final nextPage = currentState.topAnimes.currentPage + 1;
+      if (await haveInternetConnection()) {
+        final nextPage = currentState.topAnimes.currentPage + 1;
 
-      await repository.getRecentReleases(page: nextPage).then((result) {
-        result.fold((failure) {
-          emit(
-            RecentAnimeSuccess(
-              topAnimes: currentState.topAnimes,
-              anyError: failure,
-            ),
-          );
-        }, (model) {
-          final updatedPage = PaginationModel<RecentEpisodeModel>(
-            currentPage: model.currentPage,
-            hasNextPage: model.hasNextPage,
-            datas: List.from(currentState.topAnimes.datas..addAll(model.datas)),
-          );
+        await repository.getRecentReleases(page: nextPage).then((result) {
+          result.fold((failure) {
+            emit(
+              RecentAnimeSuccess(
+                topAnimes: currentState.topAnimes,
+                anyError: failure,
+              ),
+            );
+          }, (model) {
+            final updatedPage = PaginationModel<RecentEpisodeModel>(
+              currentPage: model.currentPage,
+              hasNextPage: model.hasNextPage,
+              datas:
+                  List.from(currentState.topAnimes.datas..addAll(model.datas)),
+            );
 
-          emit(RecentAnimeSuccess(
-            topAnimes: updatedPage,
-          ));
+            emit(RecentAnimeSuccess(
+              topAnimes: updatedPage,
+            ));
+          });
         });
-      });
+      }else{      const failure = InternetFailure();
+          emit(
+              RecentAnimeSuccess(
+                topAnimes: currentState.topAnimes,
+                anyError: failure,
+              ),
+            );
+      }
     }
   }
 }

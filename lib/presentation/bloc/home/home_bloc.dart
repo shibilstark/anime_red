@@ -42,28 +42,39 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final currentState = state;
 
     if (currentState is HomeSuccess && currentState.topAnimes.hasNextPage) {
-      final nextPage = currentState.topAnimes.currentPage + 1;
+      if (await haveInternetConnection()) {
+        final nextPage = currentState.topAnimes.currentPage + 1;
 
-      await repository.getTopAiringAnime(page: nextPage).then((result) {
-        result.fold((failure) {
-          emit(
-            HomeSuccess(
-              topAnimes: currentState.topAnimes,
-              anyError: failure,
-            ),
-          );
-        }, (model) {
-          final updatedPage = PaginationModel<TopAiringModel>(
-            currentPage: model.currentPage,
-            hasNextPage: model.hasNextPage,
-            datas: List.from(currentState.topAnimes.datas..addAll(model.datas)),
-          );
+        await repository.getTopAiringAnime(page: nextPage).then((result) {
+          result.fold((failure) {
+            emit(
+              HomeSuccess(
+                topAnimes: currentState.topAnimes,
+                anyError: failure,
+              ),
+            );
+          }, (model) {
+            final updatedPage = PaginationModel<TopAiringModel>(
+              currentPage: model.currentPage,
+              hasNextPage: model.hasNextPage,
+              datas:
+                  List.from(currentState.topAnimes.datas..addAll(model.datas)),
+            );
 
-          emit(HomeSuccess(
-            topAnimes: updatedPage,
-          ));
+            emit(HomeSuccess(
+              topAnimes: updatedPage,
+            ));
+          });
         });
-      });
+      } else {
+        const failure = InternetFailure();
+        emit(
+          HomeSuccess(
+            topAnimes: currentState.topAnimes,
+            anyError: failure,
+          ),
+        );
+      }
     }
   }
 }
