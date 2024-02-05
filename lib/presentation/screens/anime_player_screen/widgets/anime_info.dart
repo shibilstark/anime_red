@@ -134,7 +134,9 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
           ),
           const Gap(H: 15),
 
-          Container(
+          AnimatedContainer(
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeIn,
               decoration: BoxDecoration(
                   color: AppColors.grey.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(5),
