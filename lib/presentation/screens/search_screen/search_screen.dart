@@ -1,20 +1,14 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
 import 'package:anime_red/config/config.dart';
+import 'package:anime_red/presentation/bloc/anime_search/anime_search_bloc.dart';
 import 'package:anime_red/presentation/screens/search_screen/widgets/idle_view.dart';
 import 'package:anime_red/presentation/screens/search_screen/widgets/search_appbar.dart';
-import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../config/constants/assets.dart';
-
-final dummyGenres = [
-  "Romance",
-  "Action",
-  "Adventure",
-  "Comedy",
-];
+import 'widgets/search_result_view.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -37,7 +31,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
+        maintainBottomViewPadding: true,
         child: Padding(
           padding: AppPadding.normalScreenPadding,
           child: Column(
@@ -47,9 +43,16 @@ class _SearchScreenState extends State<SearchScreen> {
                 controller: textController,
                 node: focusNode,
                 onChanged: (text) {
+                  if (text.trim().isNotEmpty) {
+                    context.read<AnimeSearchBloc>().add(
+                          AnimeSearchQuery(text.trim()),
+                        );
+                  }
+
                   if (text.trim().isEmpty) {
                     focusNode.unfocus();
                   }
+
                   textController.notifyListeners();
                 },
               ),
@@ -60,111 +63,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     if (text.text.trim().isEmpty) {
                       return const SearchScreenIdleViewWidget();
                     } else {
-                      return const SearchScreenResultViewWidget();
+                      return SearchScreenResultViewWidget(
+                        queryController: textController,
+                      );
                     }
                   })
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class SearchScreenResultViewWidget extends StatelessWidget {
-  const SearchScreenResultViewWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const CustomSmallTitleWidget(
-          title: "Top Airing",
-        ),
-        const Gap(H: 10),
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 5,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-            ),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => const SearchResultTileWidget(),
-            itemCount: 2,
-          ),
-        ),
-      ],
-    ));
-  }
-}
-
-class SearchResultTileWidget extends StatelessWidget {
-  const SearchResultTileWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            padding: AppPadding.normalScreenPadding,
-            height: 100,
-            // width: tileWidth,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              image: const DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                  AppImageAssets.landgingBg,
-                ),
-              ),
-            ),
-
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 2,
-                  horizontal: 6,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
-                  color: AppColors.white,
-                ),
-                child: const Text(
-                  "SUB",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppColors.red,
-                    fontWeight: AppFontWeight.bolder,
-                    fontSize: AppFontSize.medium,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Gap(H: 5),
-        const Text(
-          "Naruto Shippuden",
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: AppColors.white,
-            fontWeight: AppFontWeight.bold,
-            fontSize: AppFontSize.large,
-          ),
-        )
-      ],
     );
   }
 }
