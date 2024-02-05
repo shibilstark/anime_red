@@ -2,6 +2,7 @@ import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
 import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
+import 'package:anime_red/presentation/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,12 +21,12 @@ class HomeScreen extends StatelessWidget {
       context.read<HomeBloc>().add(const HomeLoadData());
       context.read<RecentAnimeBloc>().add(const RecentAnimeLoadData());
     });
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
+              const Padding(
                 padding: AppPadding.normalScreenPadding,
                 child: Column(
                   children: [
@@ -38,21 +39,37 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // DON"T NEED ANY PADDING HERE
-              TopAiringSliderWidget(),
-
-              Padding(
-                padding: AppPadding.normalScreenPadding,
-                child: HomeSearchAndWatchlistWidget(),
-              ),
-
-              Padding(
-                padding: AppPadding.normalScreenPadding,
-                child: HomeWatchHistoryWidget(),
-              ),
-
-              Padding(
-                padding: AppPadding.normalScreenPadding,
-                child: HomeRecentReleaseWidget(),
+              BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, state) {
+                  if (state is HomeFailure) {
+                    return Center(
+                      child: AppErrorWidget(
+                        onTap: () {
+                          // TODO IMPLEMENT ALL STARTUP FUNCTIONS RETRY
+                        },
+                        errorMessage: state.message,
+                      ),
+                    );
+                  }
+                  return const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TopAiringSliderWidget(),
+                      Padding(
+                        padding: AppPadding.normalScreenPadding,
+                        child: HomeSearchAndWatchlistWidget(),
+                      ),
+                      Padding(
+                        padding: AppPadding.normalScreenPadding,
+                        child: HomeWatchHistoryWidget(),
+                      ),
+                      Padding(
+                        padding: AppPadding.normalScreenPadding,
+                        child: HomeRecentReleaseWidget(),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),

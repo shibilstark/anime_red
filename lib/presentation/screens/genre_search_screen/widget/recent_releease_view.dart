@@ -1,6 +1,7 @@
 import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
 import 'package:anime_red/presentation/screens/home_screen/widgets/recent_release.dart';
 import 'package:anime_red/presentation/widgets/custom_circular_indicator.dart';
+import 'package:anime_red/presentation/widgets/error_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +48,18 @@ class _RecentReleasesExpandedViewState
   Widget build(BuildContext context) {
     return BlocBuilder<RecentAnimeBloc, RecentAnimeState>(
       builder: (context, state) {
+        if (state is RecentAnimeFailure) {
+          return Center(
+            child: AppErrorWidget(
+              onTap: () {
+                context
+                    .read<RecentAnimeBloc>()
+                    .add(const RecentAnimeLoadData());
+              },
+              errorMessage: state.message,
+            ),
+          );
+        }
         if (state is RecentAnimeSuccess) {
           final recentAnimes = state.recentAnimes.datas;
           return Expanded(
