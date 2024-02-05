@@ -6,7 +6,13 @@ import 'package:flutter/material.dart';
 class SearchAppBarWidget extends StatelessWidget {
   const SearchAppBarWidget({
     super.key,
+    required this.controller,
+    required this.node,
+    required this.onChanged,
   });
+  final TextEditingController controller;
+  final FocusNode node;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +28,9 @@ class SearchAppBarWidget extends StatelessWidget {
               const Gap(W: 10),
               Expanded(
                 child: AppCustomTextFieldWidget(
-                  controller: TextEditingController(),
-                  focusNode: FocusNode(),
+                  controller: controller,
+                  focusNode: node,
+                  onChanged: onChanged,
                 ),
               ),
             ],

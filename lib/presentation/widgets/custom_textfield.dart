@@ -21,6 +21,7 @@ class AppCustomTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       onChanged: onChanged,
       focusNode: focusNode,
       onTapOutside: (event) {
