@@ -106,10 +106,11 @@ Route _animatePage(Widget screen) {
     pageBuilder: (context, animation, secondaryAnimation) => screen,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const curve = Curves.bounceIn;
-      const reverseCurve = Curves.bounceOut;
 
       final curvedAnimation = CurvedAnimation(
-          parent: animation, curve: curve, reverseCurve: reverseCurve);
+        parent: animation,
+        curve: curve,
+      );
 
       return FadeTransition(
         opacity: curvedAnimation,

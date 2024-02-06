@@ -1,7 +1,6 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
 import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
-import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,18 +102,18 @@ class HomeAppbarWidget extends StatelessWidget {
             height: 50,
           ),
         ),
-        IconButton(
-            padding: EdgeInsets.zero,
-            visualDensity: VisualDensity.compact,
-            onPressed: () {
-              AppNavigator.push(
-                  context: context, screenName: AppRouter.GENRE_SCREEN);
-            },
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: AppColors.white,
-              size: 25,
-            ))
+        // IconButton(
+        //     padding: EdgeInsets.zero,
+        //     visualDensity: VisualDensity.compact,
+        //     onPressed: () {
+        //       AppNavigator.push(
+        //           context: context, screenName: AppRouter.GENRE_SCREEN);
+        //     },
+        //     icon: const Icon(
+        //       Icons.settings_outlined,
+        //       color: AppColors.white,
+        //       size: 25,
+        //     ))
       ],
     );
   }

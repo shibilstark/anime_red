@@ -58,14 +58,20 @@ class HomeRecentReleaseWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CircleAvatar(
-                                radius: 10,
+                                radius: 15,
                                 backgroundColor: AppColors.grey,
+                                child: FittedBox(
+                                  child: Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: AppColors.white,
+                                  ),
+                                ),
                               ),
                               Gap(H: 10),
                               Text(
                                 "See More",
                                 style: TextStyle(
-                                  color: AppColors.grey,
+                                  color: AppColors.white,
                                   fontSize: AppFontSize.medium,
                                   fontWeight: AppFontWeight.bold,
                                 ),
