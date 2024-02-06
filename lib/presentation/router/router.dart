@@ -17,6 +17,7 @@ class AppRouter {
   static const SEARCH_SCREEN = "/search";
   static const WATCH_HISTORY_SCREEN = "/watch_history";
   static const GENRE_SCREEN = "/byGenre";
+  static const RECENT_EPISODES_SCREEN = "/recentEpisodes";
   static const ANIME_PLAYER_SCREEN = "/anime/watch";
 
   static Route? ongeneratedRoute(RouteSettings settings) {
@@ -36,10 +37,22 @@ class AppRouter {
         return _animatePage(const WatchlistHistoryScreen(
             screenType: HistoryScreenType.watchlist));
       case GENRE_SCREEN:
-        return _animatePage(const GenreScreen());
+        return _animatePage(const GenreScreen(
+          type: GenreScreenType.genre,
+        ));
+      case RECENT_EPISODES_SCREEN:
+        return _animatePage(const GenreScreen(
+          type: GenreScreenType.recentEpisodes,
+        ));
       case ANIME_PLAYER_SCREEN:
+        final (id, title) = (settings.arguments as Map<String, dynamic>)["args"]
+            as (String, String);
+
         return _animatePage(
-          const AnimePlayerScreen(),
+          AnimePlayerScreen(
+            animeId: id,
+            animeTitle: title,
+          ),
         );
       default:
         return null;
@@ -93,10 +106,11 @@ Route _animatePage(Widget screen) {
     pageBuilder: (context, animation, secondaryAnimation) => screen,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const curve = Curves.bounceIn;
-      const reverseCurve = Curves.bounceOut;
 
       final curvedAnimation = CurvedAnimation(
-          parent: animation, curve: curve, reverseCurve: reverseCurve);
+        parent: animation,
+        curve: curve,
+      );
 
       return FadeTransition(
         opacity: curvedAnimation,

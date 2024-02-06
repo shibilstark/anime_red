@@ -1,46 +1,66 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/presentation/screens/genre_search_screen/widget/recent_releease_view.dart';
 import 'package:anime_red/presentation/widgets/appbar_text.dart';
 import 'package:anime_red/presentation/widgets/common_back_button.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/material.dart';
 
-class GenreScreen extends StatelessWidget {
-  const GenreScreen({super.key});
+enum GenreScreenType {
+  genre,
+  recentEpisodes,
+}
 
+class GenreScreen extends StatefulWidget {
+  final GenreScreenType type;
+  const GenreScreen({
+    super.key,
+    required this.type,
+  });
+
+  @override
+  State<GenreScreen> createState() => _GenreScreenState();
+}
+
+class _GenreScreenState extends State<GenreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: AppPadding.normalScreenPadding,
           child: Column(
             children: [
-              const Row(
+              Row(
                 children: [
-                  CommonBackButtonWidget(),
-                  Gap(W: 10),
+                  const CommonBackButtonWidget(),
+                  const Gap(W: 10),
                   AppBarTitleTextWidget(
-                    title: "Romance",
+                    title: widget.type == GenreScreenType.recentEpisodes
+                        ? "Recent Releases"
+                        : "Romance",
                   ),
                 ],
               ),
               const Gap(H: 10),
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 3 / 5,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                  ),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) =>
-                      const SearchByGenreTileWidget(),
-                  itemCount: 5,
-                ),
-              )
+              widget.type == GenreScreenType.recentEpisodes
+                  ? const RecentReleasesExpandedView()
+                  : Expanded(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          childAspectRatio: 3 / 5,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15,
+                        ),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) =>
+                            const SearchByGenreTileWidget(),
+                        itemCount: 5,
+                      ),
+                    )
             ],
           ),
         ),

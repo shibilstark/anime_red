@@ -10,6 +10,7 @@ class AppBarTitleTextWidget extends StatelessWidget {
     return Text(
       title,
       maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: const TextStyle(
         overflow: TextOverflow.ellipsis,
         color: AppColors.white,

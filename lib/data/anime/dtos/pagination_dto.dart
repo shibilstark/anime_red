@@ -1,11 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'pagination_dto.g.dart';
-
-@JsonSerializable(genericArgumentFactories: true)
 class PaginationDto<T> {
   final int currentPage;
   final bool hasNextPage;
@@ -29,7 +24,7 @@ class PaginationDto<T> {
 
   factory PaginationDto.fromJson(String source, Function fromJsonModel) =>
       PaginationDto.fromMap(
-        json.decode(source) as Map<String, dynamic>,
+        json.decode(source),
         fromJsonModel,
       );
 }
