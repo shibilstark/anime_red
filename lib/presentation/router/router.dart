@@ -5,6 +5,7 @@ import 'package:anime_red/presentation/screens/genre_search_screen/genre_screen.
 import 'package:anime_red/presentation/screens/home_screen/home_screen.dart';
 import 'package:anime_red/presentation/screens/landing_screen/landing_screen.dart';
 import 'package:anime_red/presentation/screens/search_screen/search_screen.dart';
+import 'package:anime_red/presentation/screens/splash/splash_screen.dart';
 import 'package:anime_red/presentation/screens/watchlist_history_screen/watchlist_history_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +20,12 @@ class AppRouter {
   static const GENRE_SCREEN = "/byGenre";
   static const RECENT_EPISODES_SCREEN = "/recentEpisodes";
   static const ANIME_PLAYER_SCREEN = "/anime/watch";
+  static const SPLASH_SCREEN = "/";
 
   static Route? ongeneratedRoute(RouteSettings settings) {
     switch (settings.name) {
+      case SPLASH_SCREEN:
+        return _animatePage(const SplashScreen());
       case LANDING_SCREEN:
         return _animatePage(const LandingScreen());
       case SETTINGS_SCREEN:

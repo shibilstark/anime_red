@@ -1,6 +1,5 @@
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
-import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
 import 'package:anime_red/presentation/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,11 +15,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<HomeBloc>().add(const HomeLoadData());
-      context.read<RecentAnimeBloc>().add(const RecentAnimeLoadData());
-    });
-
     final PageStorageBucket homeBucket = PageStorageBucket();
     return PageStorage(
       bucket: homeBucket,
