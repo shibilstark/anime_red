@@ -30,15 +30,20 @@ class _AnimePlayerWidgetState extends State<AnimePlayerWidget> {
         if (state is AnimeSuccess) {
           return widget.isPlayerMode
               ? state.playerData == null
-                  ? const Column(
+                  ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Gap(H: 10),
-                        AnimePlayerView(),
-                        Gap(H: 10),
-                        ServerOptionsShimmerWidget(),
-                        Gap(H: 10),
-                        ServerOptionsShimmerWidget(),
+                        const Gap(H: 10),
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Container(
+                            color: AppColors.grey,
+                          ),
+                        ),
+                        const Gap(H: 10),
+                        const ServerOptionsShimmerWidget(),
+                        const Gap(H: 10),
+                        const ServerOptionsShimmerWidget(),
                       ],
                     )
                   : state.playerData!.fold(
@@ -57,11 +62,8 @@ class _AnimePlayerWidgetState extends State<AnimePlayerWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Gap(H: 10),
-                          AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: Container(
-                              color: AppColors.grey,
-                            ),
+                          AnimePlayerView(
+                            videoId: serverOptions.currentLink.url,
                           ),
                           const Gap(H: 10),
                           PlayerOptionsWidget(
@@ -69,10 +71,12 @@ class _AnimePlayerWidgetState extends State<AnimePlayerWidget> {
                             type: OptionTileType.quality,
                             onTap: (index, type, holdingValue, server) {
                               context.read<AnimeBloc>().add(
-                                  AnimeChangeStreamingQuality(
+                                    AnimeChangeStreamingQuality(
                                       StreamingQuality.values
                                           .byName(holdingValue),
-                                      state.currentPlayingEpisodeId!));
+                                      state.currentPlayingEpisodeId!,
+                                    ),
+                                  );
                             },
                             title: "Quality",
                             currentServer: serverOptions.currentServer,
@@ -208,12 +212,22 @@ class PlayerOptionsWidget extends StatelessWidget {
 
                   return GestureDetector(
                     onTap: () {
-                      onTap(
+                      if (type == OptionTileType.server) {
+                        onTap(
                           index,
                           type,
                           values[index],
                           availableServers.firstWhere(
-                              (element) => element.url == values[index]));
+                              (element) => element.url == values[index]),
+                        );
+                      } else {
+                        onTap(
+                          index,
+                          type,
+                          values[index],
+                          currentServer,
+                        );
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(

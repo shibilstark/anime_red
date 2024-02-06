@@ -124,8 +124,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                       AnimePlayerDataModel(
                         currentLink:
                             _getStreamingLinkByHierarchy(streamingLinks),
-                        currentServer: playerData.servers.firstWhere(
-                            (element) => element.url == event.server.url),
+                        currentServer: event.server,
                         servers: playerData.servers,
                         streamingLinks: streamingLinks,
                       ),
