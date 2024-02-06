@@ -41,6 +41,16 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
   }
 
   @override
+  void dispose() {
+    playerMode.dispose();
+    _scrollController.dispose();
+    final bloc = context.read<AnimeBloc>();
+
+    bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -96,6 +106,8 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
                                     playerMode: playerMode,
                                     scrollController: _scrollController,
                                     startEnds: state.startEndList,
+                                    currentPlayingEpisode:
+                                        state.currentPlayingEpisodeId,
                                   )
                                 : const Gap(),
                             const Gap(H: 10),
@@ -111,6 +123,8 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
                                     playerMode: playerMode,
                                     scrollController: _scrollController,
                                     startEnds: state.startEndList,
+                                    currentPlayingEpisode:
+                                        state.currentPlayingEpisodeId,
                                   )
                                 : const Gap(),
                           ],

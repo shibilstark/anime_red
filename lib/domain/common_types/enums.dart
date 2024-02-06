@@ -32,6 +32,25 @@ enum StreamingQuality {
         return StreamingQuality.defaultQuality;
     }
   }
+
+  String get toShowableString {
+    switch (this) {
+      case StreamingQuality.backupQuality:
+        return "bakcup";
+      case StreamingQuality.defaultQuality:
+        return "default";
+      case StreamingQuality.quality360p:
+        return "360p";
+      case StreamingQuality.quality480p:
+        return "480p";
+      case StreamingQuality.quality720p:
+        return "720p";
+      case StreamingQuality.quality1080p:
+        return "1080p";
+      default:
+        return "default";
+    }
+  }
 }
 
 enum AnimeType {

@@ -29,11 +29,13 @@ final class AnimeSuccess extends AnimeState {
   final AnimeModel anime;
   final List<StartEndModel> startEndList;
   final EitherFailure<AnimePlayerDataModel>? playerData;
+  final String? currentPlayingEpisodeId;
 
   const AnimeSuccess({
     required this.anime,
     required this.startEndList,
     this.playerData,
+    this.currentPlayingEpisodeId,
   });
 
   @override
@@ -41,5 +43,6 @@ final class AnimeSuccess extends AnimeState {
         anime,
         startEndList,
         playerData,
+        currentPlayingEpisodeId,
       ];
 }

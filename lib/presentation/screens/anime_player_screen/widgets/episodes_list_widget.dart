@@ -6,6 +6,9 @@ import 'package:anime_red/domain/models/start_end_model.dart';
 import 'package:anime_red/presentation/widgets/custom_small_title_widget.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../bloc/anime/anime_bloc.dart';
 
 class EpisodeListWidget extends StatefulWidget {
   const EpisodeListWidget({
@@ -14,17 +17,17 @@ class EpisodeListWidget extends StatefulWidget {
     required this.playerMode,
     required this.anime,
     required this.startEnds,
+    required this.currentPlayingEpisode,
   });
   final ValueNotifier<bool> playerMode;
   final ScrollController scrollController;
   final AnimeModel anime;
   final List<StartEndModel> startEnds;
+  final String? currentPlayingEpisode;
 
   @override
   State<EpisodeListWidget> createState() => _EpisodeListWidgetState();
 }
-
-// Key = 1-100 Value 1-100 Episode Ids
 
 class _EpisodeListWidgetState extends State<EpisodeListWidget> {
   late final ValueNotifier<StartEndModel?> selectedSection;
@@ -90,6 +93,7 @@ class _EpisodeListWidgetState extends State<EpisodeListWidget> {
                   anime: widget.anime,
                   startEnds: widget.startEnds,
                   currentSection: currentSection,
+                  currentPlayingEpisode: widget.currentPlayingEpisode,
                 ),
               ],
             );
@@ -106,12 +110,14 @@ class EpisodesGridWidget extends StatelessWidget {
     required this.anime,
     required this.startEnds,
     required this.currentSection,
+    required this.currentPlayingEpisode,
   });
   final ValueNotifier<bool> playerMode;
   final ScrollController scrollController;
   final AnimeModel anime;
   final List<StartEndModel> startEnds;
   final StartEndModel currentSection;
+  final String? currentPlayingEpisode;
 
   @override
   Widget build(BuildContext context) {
@@ -129,19 +135,32 @@ class EpisodesGridWidget extends StatelessWidget {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         final thisEpisode = showingAnimeList[index];
+        final isThisCurrentPlayingEpisode = currentPlayingEpisode != null &&
+            thisEpisode.id == currentPlayingEpisode;
+
         return GestureDetector(
           onTap: () {
-            // TODO
+            playerMode.value = true;
+            playerMode.notifyListeners();
+            scrollController.animateTo(0,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeIn);
+            context.read<AnimeBloc>().add(AnimeGetEpisodeLink(thisEpisode.id));
             // log("episode Id = ${thisEpisode.id}");
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Container(
               decoration: BoxDecoration(
+                  color: isThisCurrentPlayingEpisode
+                      ? AppColors.red
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
                     width: 1,
-                    color: AppColors.grey,
+                    color: isThisCurrentPlayingEpisode
+                        ? Colors.transparent
+                        : AppColors.grey,
                   )),
               child: FittedBox(
                 fit: BoxFit.contain,
@@ -150,10 +169,12 @@ class EpisodesGridWidget extends StatelessWidget {
                   child: Text(
                     thisEpisode.episodeNumber.toString(),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.white,
                       fontSize: AppFontSize.small,
-                      fontWeight: AppFontWeight.normal,
+                      fontWeight: isThisCurrentPlayingEpisode
+                          ? AppFontWeight.bold
+                          : AppFontWeight.normal,
                     ),
                   ),
                 ),

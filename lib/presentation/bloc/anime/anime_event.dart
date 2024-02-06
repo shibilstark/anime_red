@@ -18,7 +18,7 @@ class AnimeGetEpisodeLink extends AnimeEvent {
 }
 
 class AnimeChangeStreamingServer extends AnimeEvent {
-  final AnimeServerName server;
+  final ServerModel server;
   final String episodeId;
   const AnimeChangeStreamingServer(
       {required this.server, required this.episodeId});
@@ -26,5 +26,10 @@ class AnimeChangeStreamingServer extends AnimeEvent {
 
 class AnimeChangeStreamingQuality extends AnimeEvent {
   final StreamingQuality quality;
-  const AnimeChangeStreamingQuality(this.quality);
+  final String currentEpisodeId;
+  const AnimeChangeStreamingQuality(this.quality, this.currentEpisodeId);
+}
+
+class AnimePlayLastPlayedEpisode extends AnimeEvent {
+  const AnimePlayLastPlayedEpisode();
 }

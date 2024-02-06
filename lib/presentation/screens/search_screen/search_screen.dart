@@ -32,6 +32,16 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
+  void dispose() {
+    textController.dispose();
+    focusNode.dispose();
+
+    final bloc = context.read<AnimeSearchBloc>();
+    bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,

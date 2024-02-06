@@ -27,6 +27,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
     on<AnimeGetEpisodeLink>(_getEpisodeLinks);
     on<AnimeChangeStreamingServer>(_changeStreamingServer);
     on<AnimeChangeStreamingQuality>(_changeStreamingQuality);
+    on<AnimePlayLastPlayedEpisode>(_playLastPlayedEpisode);
   }
 
   _getAnimeInfoAndEpisodes(AnimeGetInfo event, Emitter<AnimeState> emit) async {
@@ -41,6 +42,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
             AnimeSuccess(
               anime: model,
               startEndList: List.from(_generateStartEndList(model.episodes)),
+              currentPlayingEpisodeId: null,
             ),
           );
         });
@@ -48,6 +50,32 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
     } else {
       const failure = InternetFailure();
       emit(AnimeFailure(type: failure.type, message: failure.message));
+    }
+  }
+
+  _playLastPlayedEpisode(
+    AnimePlayLastPlayedEpisode event,
+    Emitter<AnimeState> emit,
+  ) async {
+    // TODO IMPLEMENT WATCH HISTORY
+
+    final currentState = state;
+
+    if (currentState is AnimeSuccess) {
+      emit(
+        AnimeSuccess(
+          anime: currentState.anime,
+          startEndList:
+              List.from(_generateStartEndList(currentState.anime.episodes)),
+          playerData: null,
+          currentPlayingEpisodeId: null,
+        ),
+      );
+      await _getEpisodeLinks(
+          AnimeGetEpisodeLink(
+            currentState.anime.episodes.first.id,
+          ),
+          emit);
     }
   }
 
@@ -59,11 +87,21 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
 
     if (currentState is AnimeSuccess) {
       if (currentState.playerData != null) {
+        emit(
+          AnimeSuccess(
+            anime: currentState.anime,
+            startEndList:
+                List.from(_generateStartEndList(currentState.anime.episodes)),
+            playerData: null,
+            currentPlayingEpisodeId: event.episodeId,
+          ),
+        );
+
         await currentState.playerData!.fold((failure) async => null,
             (playerData) async {
           await repository
               .getStreamingLinks(
-                  episodeId: event.episodeId, server: event.server)
+                  episodeId: event.episodeId, server: event.server.name)
               .then(
             (result) {
               result.fold((failure) {
@@ -73,6 +111,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                     startEndList: List.from(
                         _generateStartEndList(currentState.anime.episodes)),
                     playerData: Left(failure),
+                    currentPlayingEpisodeId: event.episodeId,
                   ),
                 );
               }, (streamingLinks) {
@@ -86,11 +125,12 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                         currentLink:
                             _getStreamingLinkByHierarchy(streamingLinks),
                         currentServer: playerData.servers.firstWhere(
-                            (element) => element.name == event.server),
+                            (element) => element.url == event.server.url),
                         servers: playerData.servers,
                         streamingLinks: streamingLinks,
                       ),
                     ),
+                    currentPlayingEpisodeId: event.episodeId,
                   ),
                 );
               });
@@ -108,6 +148,15 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
     final currentState = state;
 
     if (currentState is AnimeSuccess) {
+      emit(
+        AnimeSuccess(
+          anime: currentState.anime,
+          startEndList:
+              List.from(_generateStartEndList(currentState.anime.episodes)),
+          playerData: null,
+          currentPlayingEpisodeId: event.currentEpisodeId,
+        ),
+      );
       if (currentState.playerData != null) {
         currentState.playerData!.fold(
           (failure) => null,
@@ -126,6 +175,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                   streamingLinks: playerData.streamingLinks,
                 ),
               ),
+              currentPlayingEpisodeId: event.currentEpisodeId,
             ));
           },
         );
@@ -134,11 +184,18 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
   }
 
   _getEpisodeLinks(AnimeGetEpisodeLink event, Emitter<AnimeState> emit) async {
-    emit(const AnimeLoading());
-
     final currentState = state;
 
     if (currentState is AnimeSuccess) {
+      emit(
+        AnimeSuccess(
+          anime: currentState.anime,
+          startEndList:
+              List.from(_generateStartEndList(currentState.anime.episodes)),
+          playerData: null,
+          currentPlayingEpisodeId: event.episodeId,
+        ),
+      );
       if (await haveInternetConnection()) {
         await repository
             .getAvailableServers(episodeId: event.episodeId)
@@ -146,11 +203,11 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
           await result.fold((failure) async {
             emit(
               AnimeSuccess(
-                anime: currentState.anime,
-                startEndList: List.from(
-                    _generateStartEndList(currentState.anime.episodes)),
-                playerData: Left(failure),
-              ),
+                  anime: currentState.anime,
+                  startEndList: List.from(
+                      _generateStartEndList(currentState.anime.episodes)),
+                  playerData: Left(failure),
+                  currentPlayingEpisodeId: event.episodeId),
             );
           }, (availableServers) async {
             late final ServerModel selectedServer;
@@ -169,28 +226,28 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
               result.fold((failure) {
                 emit(
                   AnimeSuccess(
-                    anime: currentState.anime,
-                    startEndList: List.from(
-                        _generateStartEndList(currentState.anime.episodes)),
-                    playerData: Left(failure),
-                  ),
+                      anime: currentState.anime,
+                      startEndList: List.from(
+                          _generateStartEndList(currentState.anime.episodes)),
+                      playerData: Left(failure),
+                      currentPlayingEpisodeId: event.episodeId),
                 );
               }, (streamingLinks) {
                 emit(
                   AnimeSuccess(
-                    anime: currentState.anime,
-                    startEndList: List.from(
-                        _generateStartEndList(currentState.anime.episodes)),
-                    playerData: Right(
-                      AnimePlayerDataModel(
-                        currentLink:
-                            _getStreamingLinkByHierarchy(streamingLinks),
-                        currentServer: selectedServer,
-                        servers: availableServers,
-                        streamingLinks: streamingLinks,
+                      anime: currentState.anime,
+                      startEndList: List.from(
+                          _generateStartEndList(currentState.anime.episodes)),
+                      playerData: Right(
+                        AnimePlayerDataModel(
+                          currentLink:
+                              _getStreamingLinkByHierarchy(streamingLinks),
+                          currentServer: selectedServer,
+                          servers: availableServers,
+                          streamingLinks: streamingLinks,
+                        ),
                       ),
-                    ),
-                  ),
+                      currentPlayingEpisodeId: event.episodeId),
                 );
               });
             });
@@ -200,11 +257,11 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
         const failure = InternetFailure();
         emit(
           AnimeSuccess(
-            anime: currentState.anime,
-            startEndList:
-                List.from(_generateStartEndList(currentState.anime.episodes)),
-            playerData: const Left(failure),
-          ),
+              anime: currentState.anime,
+              startEndList:
+                  List.from(_generateStartEndList(currentState.anime.episodes)),
+              playerData: const Left(failure),
+              currentPlayingEpisodeId: event.episodeId),
         );
       }
     }
