@@ -5,6 +5,14 @@ enum FailureType {
   internet,
 }
 
+enum WatchListType {
+  watching,
+  onHold,
+  planToWatch,
+  dropped,
+  completed,
+}
+
 enum StreamingQuality {
   defaultQuality,
   backupQuality,

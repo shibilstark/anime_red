@@ -1,12 +1,5 @@
+import 'package:anime_red/domain/common_types/enums.dart';
 import 'package:equatable/equatable.dart';
-
-enum WatchListType {
-  watching,
-  onHold,
-  planToWatch,
-  dropped,
-  completed,
-}
 
 class WatchListModel extends Equatable {
   final String id;

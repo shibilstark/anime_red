@@ -1,4 +1,5 @@
 import 'package:anime_red/data/watch_list/watch_list_db/watch_list_db.dart';
+import 'package:anime_red/domain/common_types/enums.dart';
 import 'package:anime_red/domain/watch_list/watch_list_model/watch_list_model.dart';
 import 'package:injectable/injectable.dart';
 
