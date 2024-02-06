@@ -11,7 +11,7 @@ class AnimeModel extends Equatable {
   final String status;
   final List<String> genres;
   final String url;
-  final String otherName;
+  final String? otherName;
   final int episodeCount;
   final List<EpisodeModel> episodes;
   final String? releaseDate;

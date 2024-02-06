@@ -15,7 +15,7 @@ AnimeDto _$AnimeDtoFromJson(Map<String, dynamic> json) => AnimeDto(
           (json['genres'] as List<dynamic>).map((e) => e as String).toList(),
       description: json['description'] as String?,
       episodeCount: json['totalEpisodes'] as int,
-      otherName: json['otherName'] as String,
+      otherName: json['otherName'] as String?,
       status: json['status'] as String,
       subOrDub: json['subOrDub'] as String,
       type: json['type'] as String?,

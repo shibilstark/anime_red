@@ -172,7 +172,7 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
 
           AnimeInfoKeyValuePairWidget(
             titleKey: "Alternative Name:",
-            value: anime.otherName,
+            value: anime.otherName ?? "Not Available",
           ),
           const Gap(H: 5),
           AnimeInfoKeyValuePairWidget(
