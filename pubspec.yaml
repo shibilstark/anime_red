@@ -37,6 +37,7 @@ dependencies:
   quiver: ^3.2.1
   chewie: ^1.7.4
   video_player: ^2.8.2
+  flutter_native_splash: ^2.3.10
 
 dev_dependencies:
   flutter_test:
@@ -44,6 +45,20 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   injectable_generator: ^1.5.4
   build_runner: ^2.4.8
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/images/ic_launcher.png"
+  min_sdk_android: 21
+
+# NATIVE SPLASH OPTIONS
+flutter_native_splash:
+  color: "#232323"
+  image: "assets/images/anime_red_standalone_logo.png"
+  android_12:
+    color: "#232323"
+    image: "assets/images/anime_red_standalone_logo.png"
 
 flutter:
   uses-material-design: true
