@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:anime_red/config/api/base_url.dart';
+import 'package:anime_red/domain/database/database_repository.dart';
 import 'package:anime_red/injector/injector.dart';
 import 'package:anime_red/presentation/bloc/anime_search/anime_search_bloc.dart';
 import 'package:anime_red/presentation/bloc/home/home_bloc.dart';
@@ -39,6 +40,7 @@ Future<void> initDependancies() async {
   );
 
   await configureInjection();
+  await getIt<AppDbRepository>().initializeDB();
 
   IS_LAUNCHED_BEFORE = await PreferenceUtil.getIsInitiallyLaunched();
 

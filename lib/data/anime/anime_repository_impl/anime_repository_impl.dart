@@ -11,7 +11,7 @@ import 'package:anime_red/domain/models/server_model.dart';
 import 'package:anime_red/domain/models/top_airing_model.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: AnimeRepository)
+@LazySingleton(as: AnimeRepository)
 class AnimeRepositoryImpl implements AnimeRepository {
   final AnimeApiService api = AnimeApiService();
 
