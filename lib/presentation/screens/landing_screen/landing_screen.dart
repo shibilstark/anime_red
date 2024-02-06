@@ -2,11 +2,15 @@ import 'dart:ui';
 
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
+import 'package:anime_red/presentation/bloc/home/home_bloc.dart';
+import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/theme_button.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
+import 'package:anime_red/utils/preference/preference_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -117,11 +121,20 @@ class LandingWidgetsView extends StatelessWidget {
                                 fontSize: AppFontSize.large,
                               ),
                             ),
-                            onTap: () {
-                              AppNavigator.push(
-                                context: context,
-                                screenName: AppRouter.HOME_SCREEN,
-                              );
+                            onTap: () async {
+                              await PreferenceUtil.setInitialLaunch()
+                                  .then((value) {
+                                context
+                                    .read<HomeBloc>()
+                                    .add(const HomeLoadData());
+                                context
+                                    .read<RecentAnimeBloc>()
+                                    .add(const RecentAnimeLoadData());
+                                AppNavigator.push(
+                                  context: context,
+                                  screenName: AppRouter.HOME_SCREEN,
+                                );
+                              });
                             }),
                       ),
                       Gap(H: screenHeight * 0.06 - currentValue),
