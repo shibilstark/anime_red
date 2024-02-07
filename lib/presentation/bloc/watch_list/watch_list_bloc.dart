@@ -12,24 +12,26 @@ part 'watch_list_state.dart';
 class WatchListBloc extends Bloc<WatchListEvent, WatchListState> {
   final WatchListRepository repository;
 
-  WatchListBloc(this.repository) : super(const WatchListState([])) {
+  WatchListBloc(this.repository)
+      : super(const WatchListState(
+          [],
+          notifier: false,
+        )) {
     on<WatchListGetAll>(_getAllWatchList);
     on<WatchListAddNew>(_addNewWatchList);
     on<WatchListUpdateType>(_updateWatchListType);
     on<WatchListRemoveItem>(_removeItemFromList);
     on<WatchListReselAll>(_resetWatchList);
-    on<WatchListAddNew>(_addNewWatchList);
     on<WatchListRemoveAllByType>(_removeAllByType);
   }
 
   _getAllWatchList(WatchListGetAll event, Emitter<WatchListState> emit) async {
-    final watchListItems = await repository.getAll();
-    emit(WatchListState(List.from(watchListItems)));
+    await __updateAll(emit);
   }
 
   _addNewWatchList(WatchListAddNew event, Emitter<WatchListState> emit) async {
-    await repository.putNewItem(event.model).then((_) {
-      emit(WatchListState(List.from(state.watchList..add(event.model))));
+    await repository.putNewItem(event.model).then((_) async {
+      await __updateAll(emit);
     });
   }
 
@@ -37,53 +39,37 @@ class WatchListBloc extends Bloc<WatchListEvent, WatchListState> {
       WatchListUpdateType event, Emitter<WatchListState> emit) async {
     await repository
         .updateWatchListType(key: event.id, type: event.type)
-        .then((value) {
-      if (value == true) {
-        emit(
-          WatchListState(
-            List.from(
-              state.watchList
-                ..firstWhere((element) => element.id == event.id)
-                    .updateWatchListType(event.type),
-            ),
-          ),
-        );
-      }
+        .then((_) async {
+      await __updateAll(emit);
     });
   }
 
   _removeItemFromList(
       WatchListRemoveItem event, Emitter<WatchListState> emit) async {
-    await repository.removeItem(event.id).then((_) {
-      emit(
-        WatchListState(
-          List.from(
-            state.watchList..removeWhere((element) => element.id == event.id),
-          ),
-        ),
-      );
+    await repository.removeItem(event.id).then((_) async {
+      await __updateAll(emit);
     });
   }
 
   _resetWatchList(WatchListReselAll event, Emitter<WatchListState> emit) async {
-    await repository.resetAllWatchList().then((_) {
-      emit(
-        WatchListState(List.from([])),
-      );
+    await repository.resetAllWatchList().then((_) async {
+      await __updateAll(emit);
     });
   }
 
   _removeAllByType(
       WatchListRemoveAllByType event, Emitter<WatchListState> emit) async {
-    await repository.removeAllFromWatchListType(event.type).then((_) {
-      emit(
-        WatchListState(
-          List.from(
-            state.watchList
-              ..removeWhere((element) => element.watchListType == event.type),
-          ),
-        ),
-      );
+    await repository.removeAllFromWatchListType(event.type).then((_) async {
+      await __updateAll(emit);
+    });
+  }
+
+  __updateAll(Emitter<WatchListState> emit) async {
+    await repository.getAll().then((watchListItems) {
+      emit(WatchListState(
+        List.from(watchListItems),
+        notifier: !state.notifier,
+      ));
     });
   }
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/home/home_bloc.dart';
+import '../../bloc/recent_anime/recent_anime_bloc.dart';
+import '../../bloc/watch_list/watch_list_bloc.dart';
 import 'widgets/recent_release.dart';
 import 'widgets/search_and_watchlist.dart';
 import 'widgets/top_airing.dart';
@@ -45,6 +47,13 @@ class HomeScreen extends StatelessWidget {
                         child: AppErrorWidget(
                           onTap: () {
                             // TODO IMPLEMENT ALL STARTUP FUNCTIONS RETRY
+                            context.read<HomeBloc>().add(const HomeLoadData());
+                            context
+                                .read<RecentAnimeBloc>()
+                                .add(const RecentAnimeLoadData());
+                            context
+                                .read<WatchListBloc>()
+                                .add(const WatchListGetAll());
                           },
                           errorMessage: state.message,
                         ),

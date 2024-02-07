@@ -71,6 +71,7 @@ class MainApp extends StatelessWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             context.read<HomeBloc>().add(const HomeLoadData());
             context.read<RecentAnimeBloc>().add(const RecentAnimeLoadData());
+            context.read<WatchListBloc>().add(const WatchListGetAll());
           });
           return MaterialApp(
             theme: ThemeData(

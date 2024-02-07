@@ -1,3 +1,4 @@
+import 'package:anime_red/domain/common_types/enums.dart';
 import 'package:anime_red/domain/watch_list/watch_list_model/watch_list_model.dart';
 import 'package:hive/hive.dart';
 

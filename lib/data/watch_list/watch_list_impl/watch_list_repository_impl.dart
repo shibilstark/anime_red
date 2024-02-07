@@ -4,7 +4,9 @@ import 'package:anime_red/domain/common_types/enums.dart';
 import 'package:anime_red/domain/watch_list/watch_list_model/watch_list_model.dart';
 import 'package:anime_red/domain/watch_list/watch_list_repository/watch_list_repository.dart';
 import 'package:anime_red/injector/injector.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: WatchListRepository)
 class WatchListRepositoryImpl implements WatchListRepository {
   @override
   WatchListDB get db => getIt<WatchListDB>();

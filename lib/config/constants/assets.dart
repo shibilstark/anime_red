@@ -7,4 +7,5 @@ class AppImageAssets {
 class AppLottieAssets {
   static const loadingText = "assets/lottie/loading_text_indicator.json";
   static const screenError = "assets/lottie/anime_red_error.json";
+  static const emptyBox = "assets/lottie/anime_red_empty.json";
 }

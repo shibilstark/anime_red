@@ -17,6 +17,7 @@ class WatchListDB {
     final box = await watchListBox;
     await box.put(entity.id, entity);
     await box.close();
+    return;
   }
 
   Future<void> removeAllFromWatchListType(String type) async {
@@ -30,18 +31,21 @@ class WatchListDB {
 
     await box.deleteAll(keys);
     await box.close();
+    return;
   }
 
   Future<void> removeItem(String key) async {
     final box = await watchListBox;
     await box.delete(key);
     await box.close();
+    return;
   }
 
   Future<void> resetAllWatchList() async {
     final box = await watchListBox;
     await box.clear();
     await box.close();
+    return;
   }
 
   Future<bool> updateWatchListType(
@@ -53,11 +57,10 @@ class WatchListDB {
     if (old != null) {
       box.put(key, old.updateWatchListType(type));
       await box.close();
-
       return true;
+    } else {
+      await box.close();
+      return false;
     }
-
-    await box.close();
-    return false;
   }
 }

@@ -10,7 +10,22 @@ enum WatchListType {
   onHold,
   planToWatch,
   dropped,
-  completed,
+  completed;
+
+  String get titleName {
+    switch (this) {
+      case watching:
+        return "Watching";
+      case onHold:
+        return "On Hold";
+      case planToWatch:
+        return "Plan to Watch";
+      case dropped:
+        return "Dropped";
+      case completed:
+        return "Completed";
+    }
+  }
 }
 
 enum StreamingQuality {
