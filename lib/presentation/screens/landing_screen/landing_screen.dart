@@ -4,6 +4,8 @@ import 'package:anime_red/config/config.dart';
 import 'package:anime_red/config/constants/assets.dart';
 import 'package:anime_red/presentation/bloc/home/home_bloc.dart';
 import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
+import 'package:anime_red/presentation/bloc/watch_history/watch_history_bloc.dart';
+import 'package:anime_red/presentation/bloc/watch_list/watch_list_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/theme_button.dart';
@@ -130,6 +132,15 @@ class LandingWidgetsView extends StatelessWidget {
                                 context
                                     .read<RecentAnimeBloc>()
                                     .add(const RecentAnimeLoadData());
+
+                                context
+                                    .read<WatchListBloc>()
+                                    .add(const WatchListGetAll());
+
+                                context
+                                    .read<WatchHistoryBloc>()
+                                    .add(const WatchHistoryGetAll());
+
                                 AppNavigator.push(
                                   context: context,
                                   screenName: AppRouter.HOME_SCREEN,

@@ -15,12 +15,14 @@ class AnimePlayButtonWidget extends StatelessWidget {
     required this.playerMode,
     required this.isShowing,
     required ScrollController scrollController,
+    required this.animeId,
   }) : _scrollController = scrollController;
 
   final ValueNotifier<bool> playerMode;
   final ScrollController _scrollController;
 
   final bool isShowing;
+  final String animeId;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class AnimePlayButtonWidget extends StatelessWidget {
                     playerMode.notifyListeners();
                     context
                         .read<AnimeBloc>()
-                        .add(const AnimePlayLastPlayedEpisode());
+                        .add(AnimePlayLastPlayedEpisode(animeId));
                     _scrollController.animateTo(0,
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeIn);
@@ -46,7 +48,7 @@ class AnimePlayButtonWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Play",
+                        "Continue Watching",
                         style: TextStyle(
                           color: AppColors.white,
                           fontWeight: AppFontWeight.bolder,

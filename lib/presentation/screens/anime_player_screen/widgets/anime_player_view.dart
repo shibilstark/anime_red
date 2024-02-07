@@ -1,4 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+
 import 'package:anime_red/config/config.dart';
+import 'package:anime_red/domain/watch_history/watch_history_repository.dart/watch_history_repository.dart';
+import 'package:anime_red/injector/injector.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +16,15 @@ class AnimePlayerView extends StatefulWidget {
   const AnimePlayerView({
     super.key,
     required this.videoId,
+    required this.animeId,
+    required this.eipsodeId,
+    required this.lastPostion,
   });
 
   final String videoId;
+  final String animeId;
+  final String eipsodeId;
+  final Duration? lastPostion;
 
   @override
   State<AnimePlayerView> createState() => _AnimePlayerViewState();
@@ -23,12 +35,34 @@ class _AnimePlayerViewState extends State<AnimePlayerView> {
 
   late ChewieController chewieController;
   late VideoPlayerController videoPlayercontroller;
+  late StreamController<(Duration, Duration)> streamController;
+
+  late StreamSubscription<dynamic> historyStream;
+
   @override
   void initState() {
     videoId = widget.videoId;
+    streamController = StreamController<(Duration, Duration)>.broadcast();
+    historyStream =
+        Stream.periodic(const Duration(seconds: 5)).listen((event) async {
+      final currentDuration = await videoPlayercontroller.position;
+      final totalLength = videoPlayercontroller.value.duration;
+      if (currentDuration != null && totalLength != Duration.zero) {
+        streamController.add((currentDuration, totalLength));
+      }
+    });
     videoPlayercontroller = VideoPlayerController.networkUrl(
       Uri.parse(videoId),
     );
+    streamController.stream.listen((event) {
+      final (currentDuration, totalLength) = event;
+      getIt<WatchHistoryRepository>().updateStatus(
+        id: widget.animeId,
+        newEpisodeId: widget.eipsodeId,
+        newPosition: currentDuration,
+        newTotalLength: totalLength,
+      );
+    });
 
     chewieController = _getCustomContrller(videoPlayercontroller);
 
@@ -41,10 +75,12 @@ class _AnimePlayerViewState extends State<AnimePlayerView> {
         videoPlayerController: videoPlayerController,
         autoPlay: true,
         autoInitialize: true,
+        looping: false,
         allowFullScreen: true,
         aspectRatio: 16 / 9,
         showControlsOnInitialize: false,
         showControls: true,
+        startAt: widget.lastPostion,
         allowedScreenSleep: false,
         materialProgressColors: ChewieProgressColors(
           backgroundColor: AppColors.grey,
@@ -58,6 +94,8 @@ class _AnimePlayerViewState extends State<AnimePlayerView> {
   void dispose() {
     chewieController.pause();
     videoPlayercontroller.dispose();
+    historyStream.cancel();
+    streamController.close();
     chewieController.dispose();
     super.dispose();
   }

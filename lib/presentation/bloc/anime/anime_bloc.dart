@@ -8,6 +8,8 @@ import 'package:anime_red/domain/models/anime_streaminglink_model.dart';
 import 'package:anime_red/domain/models/episode_model.dart';
 import 'package:anime_red/domain/models/server_model.dart';
 import 'package:anime_red/domain/models/start_end_model.dart';
+import 'package:anime_red/domain/watch_history/watch_history_model.dart/watch_history_model.dart';
+import 'package:anime_red/domain/watch_history/watch_history_repository.dart/watch_history_repository.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
@@ -21,13 +23,18 @@ part 'anime_state.dart';
 @injectable
 class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
   final AnimeRepository repository;
+  final WatchHistoryRepository watchHistoryRepository;
 
-  AnimeBloc(this.repository) : super(AnimeInitial()) {
+  AnimeBloc(
+    this.repository,
+    this.watchHistoryRepository,
+  ) : super(AnimeInitial()) {
     on<AnimeGetInfo>(_getAnimeInfoAndEpisodes);
     on<AnimeGetEpisodeLink>(_getEpisodeLinks);
     on<AnimeChangeStreamingServer>(_changeStreamingServer);
     on<AnimeChangeStreamingQuality>(_changeStreamingQuality);
     on<AnimePlayLastPlayedEpisode>(_playLastPlayedEpisode);
+    // on<AnimeUpdateLastPlayedPosition>(_updateLastPlayedPosition);
   }
 
   _getAnimeInfoAndEpisodes(AnimeGetInfo event, Emitter<AnimeState> emit) async {
@@ -53,12 +60,39 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
     }
   }
 
+  // _updateLastPlayedPosition(
+  //     AnimeUpdateLastPlayedPosition event, Emitter<AnimeState> emit) async {
+  //   await watchHistoryRepository
+  //       .updateStatus(
+  //           id: event.id,
+  //           newEpisodeId: event.episodeId,
+  //           newPosition: event.lastPostion,)
+  //       .then((value) {
+  //     final currentState = state;
+  //     if (currentState is AnimeSuccess) {
+  //       emit(AnimeSuccess(
+  //         anime: currentState.anime,
+  //         startEndList: currentState.startEndList,
+  //         currentPlayingEpisodeId: currentState.currentPlayingEpisodeId,
+  //         playerData: currentState.playerData?.fold((l) {
+  //           return Left(l);
+  //         },
+  //             (newPm) => Right(AnimePlayerDataModel(
+  //                   currentLink: newPm.currentLink,
+  //                   currentServer: newPm.currentServer,
+  //                   servers: newPm.servers,
+  //                   streamingLinks: newPm.streamingLinks,
+  //                   currentPlayPostion: event.lastPostion,
+  //                 ))),
+  //       ));
+  //     }
+  //   });
+  // }
+
   _playLastPlayedEpisode(
     AnimePlayLastPlayedEpisode event,
     Emitter<AnimeState> emit,
   ) async {
-    // TODO IMPLEMENT WATCH HISTORY
-
     final currentState = state;
 
     if (currentState is AnimeSuccess) {
@@ -71,11 +105,24 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
           currentPlayingEpisodeId: null,
         ),
       );
-      await _getEpisodeLinks(
-          AnimeGetEpisodeLink(
-            currentState.anime.episodes.first.id,
-          ),
-          emit);
+
+      await watchHistoryRepository
+          .getHistoryById(event.animeId)
+          .then((model) async {
+        if (model == null) {
+          await _getEpisodeLinks(
+              AnimeGetEpisodeLink(
+                currentState.anime.episodes.first.id,
+              ),
+              emit);
+        } else {
+          await _getEpisodeLinks(
+              AnimeGetEpisodeLink(
+                model.episodeId,
+              ),
+              emit);
+        }
+      });
     }
   }
 
@@ -103,8 +150,8 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
               .getStreamingLinks(
                   episodeId: event.episodeId, server: event.server.name)
               .then(
-            (result) {
-              result.fold((failure) {
+            (result) async {
+              await result.fold((failure) {
                 emit(
                   AnimeSuccess(
                     anime: currentState.anime,
@@ -114,7 +161,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                     currentPlayingEpisodeId: event.episodeId,
                   ),
                 );
-              }, (streamingLinks) {
+              }, (streamingLinks) async {
                 emit(
                   AnimeSuccess(
                     anime: currentState.anime,
@@ -127,6 +174,11 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                         currentServer: event.server,
                         servers: playerData.servers,
                         streamingLinks: streamingLinks,
+                        currentPlayPostion:
+                            await watchHistoryRepository.getDurationFromEpisode(
+                          id: event.episodeId,
+                          episodeId: currentState.anime.id,
+                        ),
                       ),
                     ),
                     currentPlayingEpisodeId: event.episodeId,
@@ -172,6 +224,7 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                   currentServer: playerData.currentServer,
                   servers: playerData.servers,
                   streamingLinks: playerData.streamingLinks,
+                  currentPlayPostion: playerData.currentPlayPostion,
                 ),
               ),
               currentPlayingEpisodeId: event.currentEpisodeId,
@@ -221,8 +274,8 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
             await repository
                 .getStreamingLinks(
                     episodeId: event.episodeId, server: selectedServer.name)
-                .then((result) {
-              result.fold((failure) {
+                .then((result) async {
+              await result.fold((failure) async {
                 emit(
                   AnimeSuccess(
                       anime: currentState.anime,
@@ -231,23 +284,48 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
                       playerData: Left(failure),
                       currentPlayingEpisodeId: event.episodeId),
                 );
-              }, (streamingLinks) {
-                emit(
-                  AnimeSuccess(
-                      anime: currentState.anime,
-                      startEndList: List.from(
-                          _generateStartEndList(currentState.anime.episodes)),
-                      playerData: Right(
-                        AnimePlayerDataModel(
-                          currentLink:
-                              _getStreamingLinkByHierarchy(streamingLinks),
-                          currentServer: selectedServer,
-                          servers: availableServers,
-                          streamingLinks: streamingLinks,
-                        ),
-                      ),
-                      currentPlayingEpisodeId: event.episodeId),
-                );
+              }, (streamingLinks) async {
+                await watchHistoryRepository
+                    .getDurationFromEpisode(
+                  id: currentState.anime.id,
+                  episodeId: event.episodeId,
+                )
+                    .then((lastPlayedPositionFromDB) async {
+                  await watchHistoryRepository
+                      .addNewHistory(WatchHistoryModel(
+                    id: currentState.anime.id,
+                    image: currentState.anime.image,
+                    title: currentState.anime.title,
+                    episodeId: event.episodeId,
+                    currentPosition: lastPlayedPositionFromDB,
+                    currentEpisodeCount: currentState.anime.episodes
+                        .firstWhere((element) => element.id == event.episodeId)
+                        .episodeNumber,
+                    subOrDub: currentState.anime.subOrDub,
+                    genres: currentState.anime.genres,
+                    lastUpdatedAt: DateTime.now(),
+                    totalLength: null,
+                  ))
+                      .then((_) async {
+                    emit(
+                      AnimeSuccess(
+                          anime: currentState.anime,
+                          startEndList: List.from(_generateStartEndList(
+                              currentState.anime.episodes)),
+                          playerData: Right(
+                            AnimePlayerDataModel(
+                              currentLink:
+                                  _getStreamingLinkByHierarchy(streamingLinks),
+                              currentServer: selectedServer,
+                              servers: availableServers,
+                              streamingLinks: streamingLinks,
+                              currentPlayPostion: lastPlayedPositionFromDB,
+                            ),
+                          ),
+                          currentPlayingEpisodeId: event.episodeId),
+                    );
+                  });
+                });
               });
             });
           });

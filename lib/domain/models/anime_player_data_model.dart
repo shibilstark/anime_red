@@ -7,12 +7,14 @@ class AnimePlayerDataModel extends Equatable {
   final ServerModel currentServer;
   final StreamingSourcesModel currentLink;
   final AnimeStreamingLinkModel streamingLinks;
+  final Duration? currentPlayPostion;
 
   const AnimePlayerDataModel({
     required this.currentLink,
     required this.currentServer,
     required this.servers,
     required this.streamingLinks,
+    required this.currentPlayPostion,
   });
 
   @override
@@ -21,5 +23,6 @@ class AnimePlayerDataModel extends Equatable {
         currentServer,
         servers,
         streamingLinks,
+        currentPlayPostion,
       ];
 }

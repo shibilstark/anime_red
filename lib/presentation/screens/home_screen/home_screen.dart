@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/home/home_bloc.dart';
 import '../../bloc/recent_anime/recent_anime_bloc.dart';
+import '../../bloc/watch_history/watch_history_bloc.dart';
 import '../../bloc/watch_list/watch_list_bloc.dart';
 import 'widgets/recent_release.dart';
 import 'widgets/search_and_watchlist.dart';
@@ -17,6 +18,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<WatchHistoryBloc>().add(const WatchHistorySyncAllData());
+
     final PageStorageBucket homeBucket = PageStorageBucket();
     return PageStorage(
       bucket: homeBucket,
