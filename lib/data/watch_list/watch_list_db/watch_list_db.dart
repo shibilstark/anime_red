@@ -4,24 +4,24 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class WatchListDB {
-  final watchListBox = Hive.openBox<WatchListEntity>("watchlist");
+  final _watchListBox = Hive.openBox<WatchListEntity>("watchlist");
 
   Future<List<WatchListEntity>> getAll() async {
-    final box = await watchListBox;
+    final box = await _watchListBox;
     final items = box.values.toList();
     await box.close();
     return items;
   }
 
   Future<void> putNewItem(WatchListEntity entity) async {
-    final box = await watchListBox;
+    final box = await _watchListBox;
     await box.put(entity.id, entity);
     await box.close();
     return;
   }
 
   Future<void> removeAllFromWatchListType(String type) async {
-    final box = await watchListBox;
+    final box = await _watchListBox;
 
     final keys = box.values
         .toList()
@@ -35,14 +35,14 @@ class WatchListDB {
   }
 
   Future<void> removeItem(String key) async {
-    final box = await watchListBox;
+    final box = await _watchListBox;
     await box.delete(key);
     await box.close();
     return;
   }
 
   Future<void> resetAllWatchList() async {
-    final box = await watchListBox;
+    final box = await _watchListBox;
     await box.clear();
     await box.close();
     return;
@@ -50,7 +50,7 @@ class WatchListDB {
 
   Future<bool> updateWatchListType(
       {required String key, required String type}) async {
-    final box = await watchListBox;
+    final box = await _watchListBox;
 
     final old = box.get(key);
 
