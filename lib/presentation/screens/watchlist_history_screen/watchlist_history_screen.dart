@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
 import 'package:anime_red/config/config.dart';
+import 'package:anime_red/presentation/screens/watchlist_history_screen/widgets/watch_history_view.dart';
 import 'package:anime_red/presentation/screens/watchlist_history_screen/widgets/watchlist_view.dart';
 import 'package:anime_red/presentation/widgets/common_back_button.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
@@ -35,7 +36,7 @@ class WatchlistHistoryScreen extends StatelessWidget {
                 const Gap(H: 20),
                 screenType == HistoryScreenType.watchlist
                     ? const WatchlistViewWidget()
-                    : const Gap(),
+                    : const WatchHistoryViewWidget(),
               ],
             ),
           ),
@@ -71,17 +72,19 @@ class WatchHistoryAppBarWidget extends StatelessWidget {
               child: AppBarTitleTextWidget(
                 title: screenType == HistoryScreenType.watchlist
                     ? "My Watchlist"
-                    : "My History",
+                    : "My Watch History",
               ),
             ),
           ),
           const Gap(W: 10),
           const Spacer(),
-          const Icon(
-            CupertinoIcons.search,
-            color: AppColors.white,
-            size: 20,
-          ),
+          screenType == HistoryScreenType.history
+              ? const Icon(
+                  CupertinoIcons.search,
+                  color: AppColors.white,
+                  size: 20,
+                )
+              : const Gap(),
         ],
       ),
     );

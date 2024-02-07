@@ -67,11 +67,10 @@ class SearchIdleTopAiringTileWidget extends StatelessWidget {
             screenName: AppRouter.ANIME_PLAYER_SCREEN,
             arguments: {"args": (anime.id, anime.title)});
       },
-      child: AspectRatio(
-        aspectRatio: 2 / 1,
-        child: Stack(
-          children: [
-            Stack(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -89,62 +88,62 @@ class SearchIdleTopAiringTileWidget extends StatelessWidget {
                 ),
               ],
             ),
+          ),
 
-            //
-            //
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedContainer(
-                width: double.infinity,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.bounceIn,
-                padding: AppPadding.normalScreenPadding,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      anime.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.white,
-                        fontWeight: AppFontWeight.bolder,
-                        fontSize: AppFontSize.largeTitle,
-                      ),
+          //
+          //
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              width: double.infinity,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.bounceIn,
+              padding: AppPadding.normalScreenPadding,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(H: 100),
+                  Text(
+                    anime.title,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      color: AppColors.white,
+                      fontWeight: AppFontWeight.bolder,
+                      fontSize: AppFontSize.largeTitle,
                     ),
-                    const Gap(H: 5),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 20,
-                      children: List.generate(
-                        anime.genres.length,
-                        (index) => Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.red,
-                              borderRadius: BorderRadius.circular(3)),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 6,
-                          ),
-                          child: Text(
-                            anime.genres[index],
-                            style: const TextStyle(
-                              color: AppColors.white,
-                              fontWeight: AppFontWeight.bold,
-                              fontSize: AppFontSize.small,
-                            ),
+                  ),
+                  const Gap(H: 5),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 20,
+                    children: List.generate(
+                      anime.genres.length,
+                      (index) => Container(
+                        decoration: BoxDecoration(
+                            color: AppColors.red,
+                            borderRadius: BorderRadius.circular(3)),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 6,
+                        ),
+                        child: Text(
+                          anime.genres[index],
+                          style: const TextStyle(
+                            color: AppColors.white,
+                            fontWeight: AppFontWeight.bold,
+                            fontSize: AppFontSize.small,
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

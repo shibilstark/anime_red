@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 
 import '../watch_history_entity/watch_history_entity.dart';
 
+@injectable
 class WatchHistoryDB {
   final _watchHistoryBox = Hive.openBox<WatchHistoryEntity>("watch_history");
 

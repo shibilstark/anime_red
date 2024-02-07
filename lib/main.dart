@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'config/config.dart';
 import 'presentation/bloc/anime/anime_bloc.dart';
+import 'presentation/bloc/watch_history/watch_history_bloc.dart';
 
 void main() async {
   await initDependancies();
@@ -62,6 +63,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (_) => getIt<AnimeSearchBloc>()),
         BlocProvider(create: (_) => getIt<AnimeBloc>()),
         BlocProvider(create: (_) => getIt<WatchListBloc>()),
+        BlocProvider(create: (_) => getIt<WatchHistoryBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),
@@ -72,6 +74,7 @@ class MainApp extends StatelessWidget {
             context.read<HomeBloc>().add(const HomeLoadData());
             context.read<RecentAnimeBloc>().add(const RecentAnimeLoadData());
             context.read<WatchListBloc>().add(const WatchListGetAll());
+            context.read<WatchHistoryBloc>().add(const WatchHistoryGetAll());
           });
           return MaterialApp(
             theme: ThemeData(
