@@ -16,5 +16,12 @@ abstract class WatchHistoryRepository {
     required String id,
     required String newEpisodeId,
     required Duration newPosition,
+    required Duration newTotalLength,
   });
+
+  Future<Duration?> getDurationFromEpisode({
+    required String id,
+    required String episodeId,
+  });
+  Future<WatchHistoryModel?> getHistoryById(String id);
 }

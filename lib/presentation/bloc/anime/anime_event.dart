@@ -31,5 +31,19 @@ class AnimeChangeStreamingQuality extends AnimeEvent {
 }
 
 class AnimePlayLastPlayedEpisode extends AnimeEvent {
-  const AnimePlayLastPlayedEpisode();
+  final String animeId;
+  const AnimePlayLastPlayedEpisode(this.animeId);
 }
+
+// class AnimeUpdateLastPlayedPosition extends AnimeEvent {
+//   final Duration lastPostion;
+//   final String id;
+//   final String episodeId;
+//   const AnimeUpdateLastPlayedPosition({
+//     required this.episodeId,
+//     required this.id,
+//     required this.lastPostion,
+//   });
+//   @override
+//   List<Object> get props => [lastPostion];
+// }

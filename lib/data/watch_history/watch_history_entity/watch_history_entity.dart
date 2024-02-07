@@ -15,7 +15,7 @@ class WatchHistoryEntity {
   @HiveField(3)
   final String image;
   @HiveField(4)
-  final Duration currentPosition;
+  final Duration? currentPosition;
   @HiveField(5)
   final int currentEpisodeCount;
   @HiveField(6)
@@ -24,6 +24,8 @@ class WatchHistoryEntity {
   final List<String> genres;
   @HiveField(8)
   final DateTime lastUpdatedAt;
+  @HiveField(9)
+  final Duration? totalLength;
 
   const WatchHistoryEntity({
     required this.id,
@@ -35,6 +37,7 @@ class WatchHistoryEntity {
     required this.subOrDub,
     required this.genres,
     required this.lastUpdatedAt,
+    required this.totalLength,
   });
 
   WatchHistoryModel toModel() {
@@ -48,12 +51,14 @@ class WatchHistoryEntity {
       subOrDub: subOrDub,
       genres: genres,
       lastUpdatedAt: lastUpdatedAt,
+      totalLength: totalLength,
     );
   }
 
   WatchHistoryEntity updateStatus({
     required String newEpisodeId,
     required Duration newPosition,
+    required Duration newTotalLength,
   }) {
     return WatchHistoryEntity(
       id: id,
@@ -65,6 +70,7 @@ class WatchHistoryEntity {
       subOrDub: subOrDub,
       genres: genres,
       lastUpdatedAt: DateTime.now(),
+      totalLength: newTotalLength,
     );
   }
 
@@ -79,6 +85,7 @@ class WatchHistoryEntity {
       subOrDub: model.subOrDub,
       genres: model.genres,
       lastUpdatedAt: model.lastUpdatedAt,
+      totalLength: model.totalLength,
     );
   }
 }

@@ -56,7 +56,10 @@ _i1.GetIt $initGetIt(
   gh.factory<_i13.WatchListDB>(() => _i13.WatchListDB());
   gh.lazySingleton<_i14.WatchListRepository>(
       () => _i15.WatchListRepositoryImpl());
-  gh.factory<_i16.AnimeBloc>(() => _i16.AnimeBloc(get<_i3.AnimeRepository>()));
+  gh.factory<_i16.AnimeBloc>(() => _i16.AnimeBloc(
+        get<_i3.AnimeRepository>(),
+        get<_i11.WatchHistoryRepository>(),
+      ));
   gh.factory<_i17.WatchHistoryBloc>(
       () => _i17.WatchHistoryBloc(get<_i11.WatchHistoryRepository>()));
   gh.factory<_i18.WatchListBloc>(

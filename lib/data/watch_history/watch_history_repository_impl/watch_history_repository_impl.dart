@@ -35,11 +35,25 @@ class WatchHistoryRepositoryImpl implements WatchHistoryRepository {
     required String id,
     required String newEpisodeId,
     required Duration newPosition,
+    required Duration newTotalLength,
   }) async {
     return await _db.updateStatus(
       id: id,
       episodeId: newEpisodeId,
       newPosition: newPosition,
+      newTotalLength: newTotalLength,
     );
+  }
+
+  @override
+  Future<Duration?> getDurationFromEpisode({
+    required String id,
+    required String episodeId,
+  }) async =>
+      _db.getDurationFromEpisode(id: id, episodeId: episodeId);
+
+  @override
+  Future<WatchHistoryModel?> getHistoryById(String id) async {
+    return (await _db.getHistoryById(id))?.toModel();
   }
 }

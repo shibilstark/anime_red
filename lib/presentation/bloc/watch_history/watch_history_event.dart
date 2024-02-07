@@ -20,6 +20,11 @@ class WatchHistoryClearAllHistory extends WatchHistoryEvent {
   const WatchHistoryClearAllHistory();
 }
 
+class WatchHistoryAddNewHistory extends WatchHistoryEvent {
+  final WatchHistoryModel model;
+  const WatchHistoryAddNewHistory(this.model);
+}
+
 class WatchHistorySyncAllData extends WatchHistoryEvent {
   const WatchHistorySyncAllData();
 }

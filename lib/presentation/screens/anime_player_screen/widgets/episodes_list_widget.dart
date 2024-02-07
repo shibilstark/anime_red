@@ -146,7 +146,6 @@ class EpisodesGridWidget extends StatelessWidget {
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeIn);
             context.read<AnimeBloc>().add(AnimeGetEpisodeLink(thisEpisode.id));
-            // log("episode Id = ${thisEpisode.id}");
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),

@@ -5,7 +5,8 @@ class WatchHistoryModel extends Equatable {
   final String episodeId;
   final String title;
   final String image;
-  final Duration currentPosition;
+  final Duration? currentPosition;
+  final Duration? totalLength;
   final int currentEpisodeCount;
   final String subOrDub;
   final List<String> genres;
@@ -21,6 +22,7 @@ class WatchHistoryModel extends Equatable {
     required this.subOrDub,
     required this.genres,
     required this.lastUpdatedAt,
+    required this.totalLength,
   });
 
   @override
@@ -34,5 +36,6 @@ class WatchHistoryModel extends Equatable {
         subOrDub,
         genres,
         lastUpdatedAt,
+        totalLength,
       ];
 }

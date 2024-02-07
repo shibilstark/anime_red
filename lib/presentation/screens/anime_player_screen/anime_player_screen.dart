@@ -2,6 +2,7 @@
 
 import 'package:anime_red/config/config.dart';
 import 'package:anime_red/presentation/bloc/anime/anime_bloc.dart';
+import 'package:anime_red/presentation/bloc/watch_history/watch_history_bloc.dart';
 import 'package:anime_red/presentation/screens/anime_player_screen/widgets/anime_info.dart';
 import 'package:anime_red/presentation/screens/anime_player_screen/widgets/episodes_list_widget.dart';
 import 'package:anime_red/presentation/screens/anime_player_screen/widgets/play_button.dart';
@@ -51,95 +52,102 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: ValueListenableBuilder(
-              valueListenable: playerMode,
-              builder: (context, isPlayerMode, _) {
-                return Column(
-                  children: [
-                    // AppBar
-                    Padding(
-                      padding: AppPadding.normalScreenPadding,
-                      child: Row(
-                        children: [
-                          const CommonBackButtonWidget(),
-                          const Gap(W: 10),
-                          Expanded(
-                            child: AppBarTitleTextWidget(
-                              title: widget.animeTitle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Gap(H: 10),
-
-                    // BODY
-                    BlocBuilder<AnimeBloc, AnimeState>(
-                        builder: (context, state) {
-                      if (state is AnimeFailure) {
-                        return Center(
-                          child: AppErrorWidget(
-                            errorMessage: state.message,
-                            onTap: () {
-                              context
-                                  .read<AnimeBloc>()
-                                  .add(AnimeGetInfo(widget.animeId));
-                            },
-                          ),
-                        );
-                      }
-
-                      if (state is AnimeSuccess) {
-                        return Column(
+    return PopScope(
+      onPopInvoked: (didPop) {
+        context.read<WatchHistoryBloc>().add(const WatchHistorySyncAllData());
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: ValueListenableBuilder(
+                valueListenable: playerMode,
+                builder: (context, isPlayerMode, _) {
+                  return Column(
+                    children: [
+                      // AppBar
+                      Padding(
+                        padding: AppPadding.normalScreenPadding,
+                        child: Row(
                           children: [
-                            AnimePlayerWidget(
-                              isPlayerMode: playerMode.value,
+                            const CommonBackButtonWidget(),
+                            const Gap(W: 10),
+                            Expanded(
+                              child: AppBarTitleTextWidget(
+                                title: widget.animeTitle,
+                              ),
                             ),
-                            isPlayerMode
-                                ? EpisodeListWidget(
-                                    anime: state.anime,
-                                    playerMode: playerMode,
-                                    scrollController: _scrollController,
-                                    startEnds: state.startEndList,
-                                    currentPlayingEpisode:
-                                        state.currentPlayingEpisodeId,
-                                  )
-                                : const Gap(),
-                            const Gap(H: 10),
-                            AnimeInfoWidget(anime: state.anime),
-                            const Gap(H: 10),
-                            Padding(
-                              padding: AppPadding.normalScreenPadding,
-                              child: WatchListButtonWidget(anime: state.anime),
-                            ),
-                            AnimePlayButtonWidget(
-                              playerMode: playerMode,
-                              scrollController: _scrollController,
-                              isShowing: state.startEndList.isNotEmpty,
-                            ),
-                            !isPlayerMode
-                                ? EpisodeListWidget(
-                                    anime: state.anime,
-                                    playerMode: playerMode,
-                                    scrollController: _scrollController,
-                                    startEnds: state.startEndList,
-                                    currentPlayingEpisode:
-                                        state.currentPlayingEpisodeId,
-                                  )
-                                : const Gap(),
                           ],
-                        );
-                      }
+                        ),
+                      ),
+                      const Gap(H: 10),
 
-                      return const AnimeInfoShimmerWidget();
-                    }),
-                  ],
-                );
-              }),
+                      // BODY
+                      BlocBuilder<AnimeBloc, AnimeState>(
+                          builder: (context, state) {
+                        if (state is AnimeFailure) {
+                          return Center(
+                            child: AppErrorWidget(
+                              errorMessage: state.message,
+                              onTap: () {
+                                context
+                                    .read<AnimeBloc>()
+                                    .add(AnimeGetInfo(widget.animeId));
+                              },
+                            ),
+                          );
+                        }
+
+                        if (state is AnimeSuccess) {
+                          return Column(
+                            children: [
+                              AnimePlayerWidget(
+                                isPlayerMode: playerMode.value,
+                              ),
+                              isPlayerMode
+                                  ? EpisodeListWidget(
+                                      anime: state.anime,
+                                      playerMode: playerMode,
+                                      scrollController: _scrollController,
+                                      startEnds: state.startEndList,
+                                      currentPlayingEpisode:
+                                          state.currentPlayingEpisodeId,
+                                    )
+                                  : const Gap(),
+                              const Gap(H: 10),
+                              AnimeInfoWidget(anime: state.anime),
+                              const Gap(H: 10),
+                              Padding(
+                                padding: AppPadding.normalScreenPadding,
+                                child:
+                                    WatchListButtonWidget(anime: state.anime),
+                              ),
+                              AnimePlayButtonWidget(
+                                playerMode: playerMode,
+                                scrollController: _scrollController,
+                                isShowing: state.startEndList.isNotEmpty,
+                                animeId: state.anime.id,
+                              ),
+                              !isPlayerMode
+                                  ? EpisodeListWidget(
+                                      anime: state.anime,
+                                      playerMode: playerMode,
+                                      scrollController: _scrollController,
+                                      startEnds: state.startEndList,
+                                      currentPlayingEpisode:
+                                          state.currentPlayingEpisodeId,
+                                    )
+                                  : const Gap(),
+                            ],
+                          );
+                        }
+
+                        return const AnimeInfoShimmerWidget();
+                      }),
+                    ],
+                  );
+                }),
+          ),
         ),
       ),
     );

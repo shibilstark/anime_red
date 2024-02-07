@@ -64,6 +64,9 @@ class _AnimePlayerWidgetState extends State<AnimePlayerWidget> {
                           const Gap(H: 10),
                           AnimePlayerView(
                             videoId: serverOptions.currentLink.url,
+                            animeId: state.anime.id,
+                            eipsodeId: state.currentPlayingEpisodeId!,
+                            lastPostion: serverOptions.currentPlayPostion,
                           ),
                           const Gap(H: 10),
                           PlayerOptionsWidget(
