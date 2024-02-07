@@ -8,37 +8,36 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: WatchListRepository)
 class WatchListRepositoryImpl implements WatchListRepository {
-  @override
-  WatchListDB get db => getIt<WatchListDB>();
+  WatchListDB get _db => getIt<WatchListDB>();
 
   @override
   Future<void> putNewItem(WatchListModel model) async {
-    return await db.putNewItem(WatchListEntity.fromModel(model));
+    return await _db.putNewItem(WatchListEntity.fromModel(model));
   }
 
   @override
   Future<void> removeAllFromWatchListType(WatchListType type) async {
-    return await db.removeAllFromWatchListType(type.name);
+    return await _db.removeAllFromWatchListType(type.name);
   }
 
   @override
   Future<void> removeItem(String key) async {
-    return await db.removeItem(key);
+    return await _db.removeItem(key);
   }
 
   @override
   Future<void> resetAllWatchList() async {
-    return await db.resetAllWatchList();
+    return await _db.resetAllWatchList();
   }
 
   @override
   Future<bool> updateWatchListType(
       {required String key, required WatchListType type}) async {
-    return await db.updateWatchListType(key: key, type: type.name);
+    return await _db.updateWatchListType(key: key, type: type.name);
   }
 
   @override
   Future<List<WatchListModel>> getAll() async {
-    return (await db.getAll()).map((e) => e.toModel()).toList();
+    return (await _db.getAll()).map((e) => e.toModel()).toList();
   }
 }
