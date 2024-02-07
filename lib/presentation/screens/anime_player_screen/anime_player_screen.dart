@@ -5,6 +5,7 @@ import 'package:anime_red/presentation/bloc/anime/anime_bloc.dart';
 import 'package:anime_red/presentation/screens/anime_player_screen/widgets/anime_info.dart';
 import 'package:anime_red/presentation/screens/anime_player_screen/widgets/episodes_list_widget.dart';
 import 'package:anime_red/presentation/screens/anime_player_screen/widgets/play_button.dart';
+import 'package:anime_red/presentation/screens/anime_player_screen/widgets/watchlist_button.dart';
 import 'package:anime_red/presentation/widgets/appbar_text.dart';
 import 'package:anime_red/presentation/widgets/common_back_button.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
@@ -44,9 +45,7 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
   void dispose() {
     playerMode.dispose();
     _scrollController.dispose();
-    final bloc = context.read<AnimeBloc>();
 
-    bloc.close();
     super.dispose();
   }
 
@@ -112,6 +111,11 @@ class _AnimePlayerScreenState extends State<AnimePlayerScreen> {
                                 : const Gap(),
                             const Gap(H: 10),
                             AnimeInfoWidget(anime: state.anime),
+                            const Gap(H: 10),
+                            Padding(
+                              padding: AppPadding.normalScreenPadding,
+                              child: WatchListButtonWidget(anime: state.anime),
+                            ),
                             AnimePlayButtonWidget(
                               playerMode: playerMode,
                               scrollController: _scrollController,

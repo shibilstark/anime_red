@@ -7,7 +7,6 @@ import 'package:anime_red/presentation/widgets/gap.dart';
 import 'package:anime_red/presentation/widgets/network_image_widget.dart';
 import 'package:anime_red/presentation/widgets/shimmer_widget.dart';
 import 'package:anime_red/utils/extensions/extensions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 
@@ -134,7 +133,6 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
             ),
           ),
           const Gap(H: 15),
-
           AnimatedContainer(
               duration: const Duration(seconds: 1),
               width: double.infinity,
@@ -169,10 +167,9 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
                 ),
               )),
           const Gap(H: 10),
-
           AnimeInfoKeyValuePairWidget(
             titleKey: "Alternative Name:",
-            value: anime.otherName,
+            value: anime.otherName ?? "Not Available",
           ),
           const Gap(H: 5),
           AnimeInfoKeyValuePairWidget(
@@ -194,93 +191,7 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
             titleKey: "Type",
             value: anime.type ?? "Not Available",
           ),
-
           const Gap(H: 15),
-
-          /// TODO WATCHLIST FUNCTIONALITY
-          // INACTIVE
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: AppColors.grey.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: AppColors.grey,
-                    width: 1,
-                  )),
-              padding: const EdgeInsets.symmetric(
-                vertical: 5,
-                horizontal: 10,
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    CupertinoIcons.add,
-                    size: 15,
-                    color: AppColors.white,
-                  ),
-                  Gap(W: 5),
-                  FittedBox(
-                    child: Text(
-                      "Add to Watchlist",
-                      style: TextStyle(
-                        overflow: TextOverflow.clip,
-                        color: AppColors.white,
-                        fontWeight: AppFontWeight.medium,
-                        fontSize: AppFontSize.small,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const Gap(H: 10),
-          // ACTIVE
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: AppColors.grey.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: AppColors.grey,
-                    width: 1,
-                  )),
-              padding: const EdgeInsets.symmetric(
-                vertical: 5,
-                horizontal: 10,
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.edit_note_rounded,
-                    size: 15,
-                    color: AppColors.white,
-                  ),
-                  Gap(W: 5),
-                  FittedBox(
-                    child: Text(
-                      "Edit Watchlist",
-                      style: TextStyle(
-                        overflow: TextOverflow.clip,
-                        color: AppColors.white,
-                        fontWeight: AppFontWeight.medium,
-                        fontSize: AppFontSize.small,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );

@@ -1,10 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:anime_red/config/api/base_url.dart';
+import 'package:anime_red/domain/database/database_repository.dart';
 import 'package:anime_red/injector/injector.dart';
 import 'package:anime_red/presentation/bloc/anime_search/anime_search_bloc.dart';
 import 'package:anime_red/presentation/bloc/home/home_bloc.dart';
 import 'package:anime_red/presentation/bloc/recent_anime/recent_anime_bloc.dart';
+import 'package:anime_red/presentation/bloc/watch_list/watch_list_bloc.dart';
 import 'package:anime_red/presentation/router/router.dart';
 import 'package:anime_red/utils/preference/preference_util.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +41,7 @@ Future<void> initDependancies() async {
   );
 
   await configureInjection();
+  await getIt<AppDbRepository>().initializeDB();
 
   IS_LAUNCHED_BEFORE = await PreferenceUtil.getIsInitiallyLaunched();
 
@@ -58,6 +61,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (_) => getIt<RecentAnimeBloc>()),
         BlocProvider(create: (_) => getIt<AnimeSearchBloc>()),
         BlocProvider(create: (_) => getIt<AnimeBloc>()),
+        BlocProvider(create: (_) => getIt<WatchListBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 800),
@@ -67,6 +71,7 @@ class MainApp extends StatelessWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             context.read<HomeBloc>().add(const HomeLoadData());
             context.read<RecentAnimeBloc>().add(const RecentAnimeLoadData());
+            context.read<WatchListBloc>().add(const WatchListGetAll());
           });
           return MaterialApp(
             theme: ThemeData(

@@ -25,7 +25,7 @@ class AnimeDto {
   @JsonKey(name: "url")
   final String url;
   @JsonKey(name: "otherName")
-  final String otherName;
+  final String? otherName;
   @JsonKey(name: "totalEpisodes")
   final int episodeCount;
   @JsonKey(name: "episodes")
