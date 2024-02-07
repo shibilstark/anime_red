@@ -25,13 +25,14 @@ class WatchHistoryEntityAdapter extends TypeAdapter<WatchHistoryEntity> {
       currentEpisodeCount: fields[5] as int,
       subOrDub: fields[6] as String,
       genres: (fields[7] as List).cast<String>(),
+      lastUpdatedAt: fields[8] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, WatchHistoryEntity obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class WatchHistoryEntityAdapter extends TypeAdapter<WatchHistoryEntity> {
       ..writeByte(6)
       ..write(obj.subOrDub)
       ..writeByte(7)
-      ..write(obj.genres);
+      ..write(obj.genres)
+      ..writeByte(8)
+      ..write(obj.lastUpdatedAt);
   }
 
   @override

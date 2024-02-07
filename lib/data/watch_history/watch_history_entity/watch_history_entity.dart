@@ -22,6 +22,8 @@ class WatchHistoryEntity {
   final String subOrDub;
   @HiveField(7)
   final List<String> genres;
+  @HiveField(8)
+  final DateTime lastUpdatedAt;
 
   const WatchHistoryEntity({
     required this.id,
@@ -32,6 +34,7 @@ class WatchHistoryEntity {
     required this.currentEpisodeCount,
     required this.subOrDub,
     required this.genres,
+    required this.lastUpdatedAt,
   });
 
   WatchHistoryModel toModel() {
@@ -44,6 +47,7 @@ class WatchHistoryEntity {
       currentEpisodeCount: currentEpisodeCount,
       subOrDub: subOrDub,
       genres: genres,
+      lastUpdatedAt: lastUpdatedAt,
     );
   }
 
@@ -60,6 +64,7 @@ class WatchHistoryEntity {
       currentEpisodeCount: currentEpisodeCount,
       subOrDub: subOrDub,
       genres: genres,
+      lastUpdatedAt: DateTime.now(),
     );
   }
 
@@ -73,6 +78,7 @@ class WatchHistoryEntity {
       currentEpisodeCount: model.currentEpisodeCount,
       subOrDub: model.subOrDub,
       genres: model.genres,
+      lastUpdatedAt: model.lastUpdatedAt,
     );
   }
 }

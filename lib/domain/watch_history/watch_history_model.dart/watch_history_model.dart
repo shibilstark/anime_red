@@ -9,6 +9,7 @@ class WatchHistoryModel extends Equatable {
   final int currentEpisodeCount;
   final String subOrDub;
   final List<String> genres;
+  final DateTime lastUpdatedAt;
 
   const WatchHistoryModel({
     required this.id,
@@ -19,6 +20,7 @@ class WatchHistoryModel extends Equatable {
     required this.currentEpisodeCount,
     required this.subOrDub,
     required this.genres,
+    required this.lastUpdatedAt,
   });
 
   @override
@@ -31,5 +33,6 @@ class WatchHistoryModel extends Equatable {
         currentEpisodeCount,
         subOrDub,
         genres,
+        lastUpdatedAt,
       ];
 }
