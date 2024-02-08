@@ -105,7 +105,7 @@ Route _animatePage(Widget screen) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => screen,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const curve = Curves.bounceIn;
+      const curve = Curves.linear;
 
       final curvedAnimation = CurvedAnimation(
         parent: animation,
