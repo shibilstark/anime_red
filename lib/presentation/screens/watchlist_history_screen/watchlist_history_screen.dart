@@ -5,7 +5,6 @@ import 'package:anime_red/presentation/screens/watchlist_history_screen/widgets/
 import 'package:anime_red/presentation/screens/watchlist_history_screen/widgets/watchlist_view.dart';
 import 'package:anime_red/presentation/widgets/common_back_button.dart';
 import 'package:anime_red/presentation/widgets/gap.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/appbar_text.dart';
@@ -78,13 +77,6 @@ class WatchHistoryAppBarWidget extends StatelessWidget {
           ),
           const Gap(W: 10),
           const Spacer(),
-          screenType == HistoryScreenType.history
-              ? const Icon(
-                  CupertinoIcons.search,
-                  color: AppColors.white,
-                  size: 20,
-                )
-              : const Gap(),
         ],
       ),
     );
