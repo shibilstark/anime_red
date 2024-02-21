@@ -134,38 +134,39 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
           ),
           const Gap(H: 15),
           AnimatedContainer(
-              duration: const Duration(seconds: 1),
-              width: double.infinity,
-              curve: Curves.easeIn,
-              decoration: BoxDecoration(
-                  color: AppColors.grey.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: AppColors.grey,
-                    width: 1,
-                  )),
-              padding: const EdgeInsets.symmetric(
-                vertical: 5,
-                horizontal: 5,
+            duration: const Duration(seconds: 1),
+            width: double.infinity,
+            curve: Curves.easeIn,
+            decoration: BoxDecoration(
+                color: AppColors.grey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  color: AppColors.grey,
+                  width: 1,
+                )),
+            padding: const EdgeInsets.symmetric(
+              vertical: 5,
+              horizontal: 5,
+            ),
+            child: ReadMoreText(
+              anime.description ?? "No Description Found",
+              trimLines: 3,
+              style: const TextStyle(
+                color: AppColors.white,
+                fontWeight: AppFontWeight.medium,
+                fontSize: AppFontSize.small,
               ),
-              child: ReadMoreText(
-                anime.description ?? "No Description Found",
-                trimLines: 3,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontWeight: AppFontWeight.medium,
-                  fontSize: AppFontSize.small,
-                ),
-                colorClickableText: Colors.pink,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: ' Show more',
-                trimExpandedText: ' Show less',
-                moreStyle: const TextStyle(
-                  fontSize: AppFontSize.small,
-                  fontWeight: AppFontWeight.bold,
-                  color: AppColors.indicator,
-                ),
-              )),
+              colorClickableText: Colors.pink,
+              trimMode: TrimMode.Line,
+              trimCollapsedText: ' Show more',
+              trimExpandedText: ' Show less',
+              moreStyle: const TextStyle(
+                fontSize: AppFontSize.small,
+                fontWeight: AppFontWeight.bold,
+                color: AppColors.indicator,
+              ),
+            ),
+          ),
           const Gap(H: 10),
           AnimeInfoKeyValuePairWidget(
             titleKey: "Alternative Name:",
@@ -191,6 +192,16 @@ class AnimeInfoForegroundWidget extends StatelessWidget {
             titleKey: "Type",
             value: anime.type ?? "Not Available",
           ),
+          const Gap(H: 10),
+          const Text(
+            "Warning: If you are seeing some alignment issue in UI, it is strictly from the api resopnse. Notified them about it hope it will fix sooon",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColors.indicator,
+              fontWeight: AppFontWeight.normal,
+              fontSize: AppFontSize.small,
+            ),
+          ),
           const Gap(H: 15),
         ],
       ),
@@ -212,6 +223,7 @@ class AnimeInfoKeyValuePairWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           titleKey,
